@@ -1,0 +1,36 @@
+{
+  "name": "taxeasy-za-2025",
+  "version": "1.0.0",
+  "description": "Professional South African tax calculator for 2025 tax year - SARS compliant",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "echo 'Static site - no build required'",
+    "test": "echo 'Tests not implemented yet'"
+  },
+  "keywords": [
+    "south-africa",
+    "tax-calculator",
+    "sars",
+    "tax-return",
+    "2025"
+  ],
+  "author": "TaxEasy ZA Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.0.0",
+    "compression": "^1.7.4",
+    "dotenv": "^16.3.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/taxeasyza-oss/TaxEasy_Za_2025.git"
+  },
+  "homepage": "https://taxeasy-za-2025.onrender.com"
+}

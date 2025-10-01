@@ -1,0 +1,21 @@
+{
+    "name": "TaxEasy ZA 2025",
+    "short_name": "TaxEasy ZA",
+    "description": "Professional South African Tax Calculator 2025 – SARS compliant.",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#2563eb",
+    "icons": [
+        {
+            "src": "favicon.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "favicon.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

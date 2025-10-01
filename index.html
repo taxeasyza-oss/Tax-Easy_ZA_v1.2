@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaxEasy ZA 2025 – SARS Compliant Tax Calculator</title>
+    <meta name="description" content="Professional South African tax calculator for 2025. 100% SARS compliant with official tax tables. Calculate your tax refund or liability accurately.">
+    <meta name="keywords" content="South Africa tax calculator, SARS, tax refund, tax return, 2025 tax year, IRP5, eFiling">
+    
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- POPIA Compliance Banner -->
+    <div id="popiaConsent" class="popia-banner" style="display: none;">
+        <div class="popia-content">
+            <div class="popia-text">
+                <p><strong>🔒 Privacy Notice:</strong> We use cookies and collect personal information to provide our tax calculation services. By continuing to use this site, you consent to our use of cookies and processing of your personal information in accordance with our <a href="privacy-policy.html">Privacy Policy</a> and South Africa's POPIA regulations.</p>
+            </div>
+            <div class="popia-actions">
+                <button id="acceptPopia" class="btn btn-primary">Accept & Continue</button>
+                <button id="declinePopia" class="btn btn-secondary">Decline</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="images/logo.png" alt="TaxEasy_ZA Logo" style="height: 60px; margin-right: 15px; vertical-align: middle;">
+                    <div style="display: inline-block; vertical-align: middle;">
+                        <h1>TaxEasy ZA 2025</h1>
+                        <p>Simplifying tax, one click at a time</p>
+                    </div>
+                </div>
+                
+                <div class="header-controls">
+                    <div class="header-buttons">
+                        <a href="faq.html" class="btn btn-secondary">FAQ</a>
+                        <a href="efiling-guide.html" class="btn btn-secondary">eFiling Guide</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero">
+                <h2>Your tax questions answered, anytime, anywhere</h2>
+                <p>From refunds to returns – we've got you covered. Professional SARS-compliant tax calculator with comprehensive reporting options.</p>
+                
+                <div class="features">
+                    <div class="feature">🛡️ SARS 2025 Compliant</div>
+                    <div class="feature">📊 Professional Reports</div>
+                    <div class="feature">🔒 Secure & Private</div>
+                    <div class="feature">⚡ Fast & Accurate</div>
+                </div>
+            </section>
+
+            <!-- Tax Tip Section -->
+            <section class="tax-tip-section">
+                <h3>💡 Tax Tip of the Day</h3>
+                <p id="currentTip">Complete all sections for the most accurate tax calculation and maximize your refund potential.</p>
+                <button type="button" class="btn btn-link" onclick="rotateTip()">Next Tip →</button>
+            </section>
+
+            <!-- Progress Section -->
+            <section class="progress-section">
+                <div class="progress-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" id="progressPercentage">3%</div>
+                        <div class="stat-label">Completed</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="timeRemaining">5 min</div>
+                        <div class="stat-label">Time Remaining</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="fieldsCompleted">1/29</div>
+                        <div class="stat-label">Fields Completed</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Personal</div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Income</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Deductions</div>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Advanced</div>
+                </div>
+                <div class="step" data-step="5">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Summary</div>
+                </div>
+            </div>
+
+            <!-- Tax Calculator Form -->
+            <div class="calculator-container">
+                <form id="taxCalculatorForm" class="tax-form">
+                    <!-- Step 1: Personal Information -->
+                    <div class="wizard-step active" data-step="1">
+                        <div class="step-header">
+                            <h3>Personal Information <span class="tooltip-icon" data-tooltip="personal_info_title">?</span></h3>
+                            <p>Tell us a bit about yourself to get started</p>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="fullName">Full Name <span class="tooltip-icon" data-tooltip="full_name">?</span></label>
+                                <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="idNumber">ID/Passport Number <span class="tooltip-icon" data-tooltip="id_number">?</span></label>
+                                <input type="text" id="idNumber" name="idNumber" placeholder="Enter your ID or passport number" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="ageGroup">Age Group <span class="tooltip-icon" data-tooltip="age_group">?</span></label>
+                                <select id="ageGroup" name="ageGroup" required>
+                                    <option value="under65">Under 65</option>
+                                    <option value="65-74">65-74</option>
+                                    <option value="75plus">75+</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="occupation">Occupation <span class="tooltip-icon" data-tooltip="occupation">?</span></label>
+                                <select id="occupation" name="occupation" required>
+                                    <option value="">Select your occupation</option>
+                                    <option value="doctor">Doctor</option>
+                                    <option value="teacher">Teacher</option>
+                                    <option value="it_professional">IT Professional</option>
+                                    <option value="engineer">Engineer</option>
+                                    <option value="healthcare_worker">Healthcare Worker</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group full-width">
+                                <label for="emailAddress">Email Address <span class="tooltip-icon" data-tooltip="email_address">?</span></label>
+                                <input type="email" id="emailAddress" name="emailAddress" placeholder="Enter your email address" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Income Information -->
+                    <div class="wizard-step" data-step="2">
+                        <div class="step-header">
+                            <h3>Income Information <span class="tooltip-icon" data-tooltip="income_info_title">?</span></h3>
+                            <p>Enter your income details as shown on your IRP5 and other tax certificates</p>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="basicSalary">Basic Salary (Annual) <span class="tooltip-icon" data-tooltip="basic_salary">?</span></label>
+                                <input type="number" id="basicSalary" name="basicSalary" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bonus">Bonus <span class="tooltip-icon" data-tooltip="bonus">?</span></label>
+                                <input type="number" id="bonus" name="bonus" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="overtime">Overtime <span class="tooltip-icon" data-tooltip="overtime">?</span></label>
+                                <input type="number" id="overtime" name="overtime" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="travelAllowance">Travel Allowance <span class="tooltip-icon" data-tooltip="travel_allowance">?</span></label>
+                                <input type="number" id="travelAllowance" name="travelAllowance" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="cellphoneAllowance">Cellphone Allowance <span class="tooltip-icon" data-tooltip="cellphone_allowance">?</span></label>
+                                <input type="number" id="cellphoneAllowance" name="cellphoneAllowance" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="otherAllowances">Other Allowances <span class="tooltip-icon" data-tooltip="other_allowances">?</span></label>
+                                <input type="number" id="otherAllowances" name="otherAllowances" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="interestIncome">Interest Income <span class="tooltip-icon" data-tooltip="interest_income">?</span></label>
+                                <input type="number" id="interestIncome" name="interestIncome" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="dividendIncome">Dividend Income <span class="tooltip-icon" data-tooltip="dividend_income">?</span></label>
+                                <input type="number" id="dividendIncome" name="dividendIncome" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="rentalIncome">Rental Income <span class="tooltip-icon" data-tooltip="rental_income">?</span></label>
+                                <input type="number" id="rentalIncome" name="rentalIncome" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group full-width">
+                                <label for="taxesPaid">Taxes Already Paid (PAYE) <span class="tooltip-icon" data-tooltip="taxes_paid">?</span></label>
+                                <input type="number" id="taxesPaid" name="taxesPaid" placeholder="0" min="0" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Standard Deductions -->
+                    <div class="wizard-step" data-step="3">
+                        <div class="step-header">
+                            <h3>Standard Deductions <span class="tooltip-icon" data-tooltip="deductions_title">?</span></h3>
+                            <p>Enter your deductible contributions and expenses</p>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="pensionFund">Pension Fund Contributions <span class="tooltip-icon" data-tooltip="pension_fund">?</span></label>
+                                <input type="number" id="pensionFund" name="pensionFund" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="providentFund">Provident Fund Contributions <span class="tooltip-icon" data-tooltip="provident_fund">?</span></label>
+                                <input type="number" id="providentFund" name="providentFund" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="retirementAnnuity">Retirement Annuity Contributions <span class="tooltip-icon" data-tooltip="retirement_annuity">?</span></label>
+                                <input type="number" id="retirementAnnuity" name="retirementAnnuity" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="medicalAid">Medical Aid Contributions <span class="tooltip-icon" data-tooltip="medical_aid">?</span></label>
+                                <input type="number" id="medicalAid" name="medicalAid" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="medicalMembers">Medical Aid Members <span class="tooltip-icon" data-tooltip="medical_members">?</span></label>
+                                <input type="number" id="medicalMembers" name="medicalMembers" placeholder="1" min="0" step="1">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="medicalDependants">Medical Aid Dependants <span class="tooltip-icon" data-tooltip="medical_dependants">?</span></label>
+                                <input type="number" id="medicalDependants" name="medicalDependants" placeholder="0" min="0" step="1">
+                            </div>
+                            
+                            <div class="form-group full-width">
+                                <label for="donations">Donations (Section 18A) <span class="tooltip-icon" data-tooltip="donations">?</span></label>
+                                <input type="number" id="donations" name="donations" placeholder="0" min="0" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Advanced Deductions -->
+                    <div class="wizard-step" data-step="4">
+                        <div class="step-header">
+                            <h3>Advanced Deductions <span class="tooltip-icon" data-tooltip="advanced_deductions_title">?</span></h3>
+                            <p>Additional deductions and renewable energy investments</p>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="homeOffice">Home Office Expenses <span class="tooltip-icon" data-tooltip="home_office">?</span></label>
+                                <input type="number" id="homeOffice" name="homeOffice" placeholder="0" min="0" max="15000" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="travelExpenses">Travel Expenses <span class="tooltip-icon" data-tooltip="travel_expenses">?</span></label>
+                                <input type="number" id="travelExpenses" name="travelExpenses" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="professionalFees">Professional Fees <span class="tooltip-icon" data-tooltip="professional_fees">?</span></label>
+                                <input type="number" id="professionalFees" name="professionalFees" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="solarPV">Solar PV Investment <span class="tooltip-icon" data-tooltip="solar_pv">?</span></label>
+                                <input type="number" id="solarPV" name="solarPV" placeholder="0" min="0" max="1000000" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="solarWaterHeating">Solar Water Heating <span class="tooltip-icon" data-tooltip="solar_water_heating">?</span></label>
+                                <input type="number" id="solarWaterHeating" name="solarWaterHeating" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="otherRenewable">Other Renewable Energy <span class="tooltip-icon" data-tooltip="other_renewable">?</span></label>
+                                <input type="number" id="otherRenewable" name="otherRenewable" placeholder="0" min="0" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Summary and Results -->
+                    <div class="wizard-step" data-step="5">
+                        <div class="step-header">
+                            <h3>Tax Calculation Summary <span class="tooltip-icon" data-tooltip="summary_title">?</span></h3>
+                            <p>Review your complete tax calculation and generate reports</p>
+                        </div>
+                        
+                        <div class="results-container">
+                            <div class="calculation-summary">
+                                <div class="summary-item">
+                                    <span class="label">Gross Income:</span>
+                                    <span id="grossIncomeDisplay" class="amount">R0</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="label">Total Deductions:</span>
+                                    <span id="totalDeductionsDisplay" class="amount">R0</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="label">Taxable Income:</span>
+                                    <span id="taxableIncomeDisplay" class="amount">R0</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="label">Tax Before Rebates:</span>
+                                    <span id="taxBeforeRebatesDisplay" class="amount">R0</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="label">Tax Rebates:</span>
+                                    <span id="taxRebatesDisplay" class="amount">R0</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="label">Medical Credits:</span>
+                                    <span id="medicalCreditsDisplay" class="amount">R0</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="label">Net Tax Payable:</span>
+                                    <span id="netTaxPayableDisplay" class="amount">R0</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="label">Taxes Already Paid:</span>
+                                    <span id="taxesPaidDisplay" class="amount">R0</span>
+                                </div>
+                                
+                                <div class="final-result">
+                                    <span id="resultLabel">Amount Due/Refund:</span>
+                                    <span id="finalResult" class="result-amount">R0</span>
+                                </div>
+                            </div>
+                            
+                            <div class="report-options">
+                                <h4>Generate Your Tax Report</h4>
+                                <div class="report-cards">
+                                    <div class="report-card basic">
+                                        <h5>Basic Report - FREE</h5>
+                                        <ul>
+                                            <li>Tax calculation summary</li>
+                                            <li>Basic deductions breakdown</li>
+                                            <li>SARS compliant format</li>
+                                        </ul>
+                                        <button type="button" class="btn btn-primary" onclick="generateBasicReport()">
+                                            Download Free Report
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="report-card professional">
+                                        <h5>Professional Report - R129</h5>
+                                        <ul>
+                                            <li>Comprehensive tax analysis</li>
+                                            <li>Detailed deductions breakdown</li>
+                                            <li>Tax planning recommendations</li>
+                                            <li>eFiling instructions</li>
+                                            <li>Professional formatting</li>
+                                        </ul>
+                                        <div class="discount-code-section">
+                                            <label for="discountCode">Discount Code (Optional):</label>
+                                            <input type="text" id="discountCode" name="discountCode" placeholder="Enter discount code">
+                                            <button type="button" class="btn btn-secondary" onclick="applyDiscount()">Apply</button>
+                                        </div>
+                                        <div class="price-display">
+                                            <span class="original-price" id="originalPrice">R129</span>
+                                            <span class="final-price" id="finalPrice">R129</span>
+                                        </div>
+                                        <button type="button" class="btn btn-success" onclick="purchaseProfessionalReport()">
+                                            Purchase Professional Report
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="wizard-navigation">
+                        <button type="button" id="prevBtn" class="btn btn-secondary" onclick="previousStep()">
+                            ← Previous
+                        </button>
+                        <button type="button" id="nextBtn" class="btn btn-primary" onclick="nextStep()">
+                            Next →
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Important Disclaimer -->
+    <div class="disclaimer-section" style="background: #fef3c7; border: 2px solid #f59e0b; margin: 20px 0; padding: 20px; border-radius: 8px;">
+        <div class="container">
+            <h4 style="color: #92400e; margin-bottom: 10px;">⚠️ IMPORTANT DISCLAIMER</h4>
+            <p style="color: #92400e; font-size: 14px; line-height: 1.6; margin: 0;">
+                <strong>This calculator provides estimates only.</strong> While we strive for 100% SARS compliance using official 2025 tax tables, 
+                your actual tax liability may differ based on individual circumstances. This tool does not constitute professional tax advice. 
+                For complex tax situations, consult a registered tax practitioner. Always verify calculations with official SARS resources. 
+                Keep all supporting documents for SARS verification. TaxEasy ZA is not liable for any decisions made based on these calculations.
+            </p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>TaxEasy ZA</h4>
+                    <p>Professional South African tax calculator for the 2025 tax year. 100% SARS compliant calculations using official tax tables.</p>
+                    <p style="font-size: 12px; color: #6b7280; margin-top: 10px;">
+                        <strong>Disclaimer:</strong> Estimates only. Not professional tax advice. Verify with SARS.
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="efiling-guide.html">eFiling Guide</a></li>
+                        <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                        <li><a href="terms-of-service.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact & Support</h4>
+                    <p>For support and inquiries, please visit our FAQ section first.</p>
+                    <p style="font-size: 12px; color: #6b7280;">
+                        SARS Contact Centre: 0800 00 7277<br>
+                        SARS eFiling: www.sarsefiling.co.za
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 TaxEasy ZA. All rights reserved. SARS compliant tax calculator using official 2025 tax tables.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/tax-constants.js"></script>
+    <script src="js/tax-calculator.js"></script>
+    <script src="js/tax-optimizer.js"></script>
+    <script src="js/wizard-navigation.js"></script>
+    <script src="js/tooltip-system.js"></script>
+    <script src="js/pdf-generator.js"></script>
+    <script src="js/payment-integration.js"></script>
+    <script src="js/main.js"></script>
+    
+    <script>
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('TaxEasy ZA 2025 - Application starting...');
+        });
+    </script>
+</body>
+</html>
