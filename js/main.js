@@ -549,8 +549,18 @@ window.TaxEasyApp = {
     },
     
     // Show notification
+    notificationTimeout: null,
     showNotification: function(message, type = 'info') {
         if (!this.userPreferences.notifications) return;
+
+        // Clear any existing notification timeout to prevent rapid-fire notifications
+        clearTimeout(this.notificationTimeout);
+
+        // Remove any existing notification elements to prevent stacking
+        const existingNotification = document.querySelector('.notification');
+        if (existingNotification) {
+            existingNotification.remove();
+        }
         
         // Create notification element
         const notification = document.createElement('div');
@@ -573,10 +583,10 @@ window.TaxEasyApp = {
         document.body.appendChild(notification);
         
         // Remove after 3 seconds
-        setTimeout(() => {
+        this.notificationTimeout = setTimeout(() => {
             notification.style.animation = 'slideOut 0.3s ease-in';
             setTimeout(() => {
-                document.body.removeChild(notification);
+                notification.remove();
             }, 300);
         }, 3000);
     },

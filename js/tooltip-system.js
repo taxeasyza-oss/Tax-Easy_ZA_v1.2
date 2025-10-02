@@ -160,7 +160,7 @@ window.TooltipSystem = {
             'basic_salary': 'Your annual basic salary before any deductions. This should match the amount on your IRP5 certificate.',
             'bonus': 'Any bonus payments received during the tax year. Include 13th cheques, performance bonuses, and similar payments.',
             'overtime': 'Total overtime payments received during the tax year. This is typically shown separately on your IRP5.',
-            'travel_allowance': 'Annual travel allowance received from your employer. This may be partially taxable depending on usage.',
+            'travel_allowance': 'Annual travel allowance received from your employer. This may be partially taxable depending on usage. If you use a company car, ensure you understand the fringe benefit tax implications. Keep a detailed logbook for business travel.',
             'cellphone_allowance': 'Annual cellphone allowance provided by your employer for business use.',
             'other_allowances': 'Any other allowances not listed above, such as housing, entertainment, or tool allowances.',
             'interest_income': 'Interest earned from bank accounts, investments, and loans. The first R23,800 (R34,500 for 65+) is tax-free.',
@@ -177,20 +177,21 @@ window.TooltipSystem = {
             'medical_dependants': 'Number of dependants on your medical aid. Each dependant qualifies for additional monthly tax credits.',
             'donations': 'Donations to registered charities with Section 18A certificates. Deductible up to 10% of taxable income.',
             
-            // Advanced Deductions
-            'home_office': 'Expenses for maintaining a home office used exclusively for work. Maximum deduction is R15,000 per year.',
-            'travel_expenses': 'Business travel expenses not reimbursed by your employer. Keep detailed records and receipts.',
-            'professional_fees': 'Fees paid to professional bodies, licenses, and subscriptions required for your work.',
-            'solar_pv': 'Investment in solar photovoltaic systems. Deductible up to R1,000,000 over multiple years.',
-            'solar_water_heating': 'Investment in solar water heating systems. 25% of the cost is deductible in the year of installation.',
-            'other_renewable': 'Other qualifying renewable energy investments such as wind or biogas systems.',
+            // Advanced Deductions - Enhanced for occupation-specific and travel allowances
+            'home_office': 'Expenses for maintaining a home office used exclusively for work. Maximum deduction is R15,000 per year. Ensure you meet all SARS requirements.',
+            'occupation_specific_deductions': 'Deductions specific to your profession (e.g., teachers, nurses, police officers). These often require specific criteria and documentation. Consult SARS guidelines for your specific occupation.',
+            'travel_km_allowance': 'Claim for business travel using your private vehicle. You can claim a deemed rate per kilometer or actual costs. A detailed logbook is mandatory for all claims. Refer to SARS tables for deemed rates and fringe benefit rules.',
+            'professional_fees': 'Fees paid to professional bodies, licenses, and subscriptions required for your work. Keep proof of payment and membership.',
+            'solar_pv': 'Investment in solar photovoltaic systems. Deductible up to R1,000,000 over multiple years. Ensure you have the necessary certificates and invoices.',
+            'solar_water_heating': 'Investment in solar water heating systems. 25% of the cost is deductible in the year of installation. Keep proof of purchase and installation.',
+            'other_renewable': 'Other qualifying renewable energy investments such as wind or biogas systems. Consult SARS for specific eligibility criteria and documentation requirements.',
             
             // General tooltips
             'personal_info_title': 'We need some basic information about you to calculate your tax correctly and apply the appropriate rebates.',
             'income_info_title': 'Enter all your income sources as shown on your IRP5 and other tax certificates. This ensures accurate tax calculation.',
             'deductions_title': 'These are the most common tax deductions. Enter the amounts you contributed or paid during the tax year.',
-            'advanced_deductions_title': 'Additional deductions for specific circumstances, occupation-related expenses, and renewable energy investments.',
-            'summary_title': 'Review your complete tax calculation. You can generate a basic report for free or purchase a comprehensive professional report.'
+            'advanced_deductions_title': 'Additional deductions for specific circumstances, occupation-related expenses, and renewable energy investments. These can significantly reduce your tax liability.',
+            'summary_title': 'Review your complete tax calculation. Purchase a comprehensive professional report for R149 to get detailed e-filing instructions and a PDF report.'
         };
     },
     

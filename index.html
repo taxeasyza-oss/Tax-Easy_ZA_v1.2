@@ -286,8 +286,13 @@
                             </div>
                             
                             <div class="form-group">
-                                <label for="travelExpenses">Travel Expenses <span class="tooltip-icon" data-tooltip="travel_expenses">?</span></label>
-                                <input type="number" id="travelExpenses" name="travelExpenses" placeholder="0" min="0" step="0.01">
+                                <label for="occupationSpecificDeductions">Occupation Specific Deductions <span class="tooltip-icon" data-tooltip="occupation_specific_deductions">?</span></label>
+                                <input type="number" id="occupationSpecificDeductions" name="occupationSpecificDeductions" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="travelKmAllowance">Travel Kilometers (Business) <span class="tooltip-icon" data-tooltip="travel_km_allowance">?</span></label>
+                                <input type="number" id="travelKmAllowance" name="travelKmAllowance" placeholder="0" min="0" step="1">
                             </div>
                             
                             <div class="form-group">
@@ -360,23 +365,11 @@
                                 </div>
                             </div>
                             
-                            <div class="report-options">
+                            <div class="report-actions" style="display: none;">
                                 <h4>Generate Your Tax Report</h4>
                                 <div class="report-cards">
-                                    <div class="report-card basic">
-                                        <h5>Basic Report - FREE</h5>
-                                        <ul>
-                                            <li>Tax calculation summary</li>
-                                            <li>Basic deductions breakdown</li>
-                                            <li>SARS compliant format</li>
-                                        </ul>
-                                        <button type="button" class="btn btn-primary" onclick="generateBasicReport()">
-                                            Download Free Report
-                                        </button>
-                                    </div>
-                                    
                                     <div class="report-card professional">
-                                        <h5>Professional Report - R129</h5>
+                                        <h5>Professional Report - R149</h5>
                                         <ul>
                                             <li>Comprehensive tax analysis</li>
                                             <li>Detailed deductions breakdown</li>
@@ -390,8 +383,8 @@
                                             <button type="button" class="btn btn-secondary" onclick="applyDiscount()">Apply</button>
                                         </div>
                                         <div class="price-display">
-                                            <span class="original-price" id="originalPrice">R129</span>
-                                            <span class="final-price" id="finalPrice">R129</span>
+                                            <span class="original-price" id="originalPrice">R149</span>
+                                            <span class="final-price" id="finalPrice">R149</span>
                                         </div>
                                         <button type="button" class="btn btn-success" onclick="purchaseProfessionalReport()">
                                             Purchase Professional Report
@@ -454,7 +447,8 @@
                     <p>For support and inquiries, please visit our FAQ section first.</p>
                     <p style="font-size: 12px; color: #6b7280;">
                         SARS Contact Centre: 0800 00 7277<br>
-                        SARS eFiling: www.sarsefiling.co.za
+                        SARS eFiling: www.sarsefiling.co.za<br>
+                        Email: <a href="mailto:taxeasyza@gmail.com">taxeasyza@gmail.com</a>
                     </p>
                 </div>
             </div>
