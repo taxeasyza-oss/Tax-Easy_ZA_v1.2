@@ -1,0 +1,374 @@
+/* Enhanced POPIA Cookie Consent Styles */
+
+.popia-banner.enhanced {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    color: var(--white);
+    padding: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10000;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    max-height: 90vh;
+    overflow-y: auto;
+    border-bottom: 4px solid var(--primary-color);
+}
+
+.popia-content.enhanced {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: var(--spacing-xl);
+    display: block;
+}
+
+.popia-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.popia-header h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+.popia-header p {
+    font-size: 1rem;
+    color: var(--gray-300);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.cookie-categories {
+    display: grid;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.cookie-category {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.cookie-category:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.cookie-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--white);
+}
+
+.cookie-toggle input[type="checkbox"] {
+    display: none;
+}
+
+.toggle-slider {
+    position: relative;
+    width: 50px;
+    height: 24px;
+    background: var(--gray-600);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background: var(--white);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.cookie-toggle input[type="checkbox"]:checked + .toggle-slider {
+    background: var(--primary-color);
+}
+
+.cookie-toggle input[type="checkbox"]:checked + .toggle-slider::before {
+    transform: translateX(26px);
+}
+
+.cookie-toggle input[type="checkbox"]:disabled + .toggle-slider {
+    background: var(--success-color);
+    cursor: not-allowed;
+}
+
+.required-badge {
+    background: var(--success-color);
+    color: var(--white);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: var(--spacing-sm);
+}
+
+.details-toggle {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: var(--white);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.details-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.category-description {
+    margin-bottom: var(--spacing-md);
+}
+
+.category-description p {
+    color: var(--gray-300);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.category-details {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+.category-details h4 {
+    color: var(--white);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+}
+
+.category-details ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.category-details li {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.category-details li:last-child {
+    margin-bottom: 0;
+}
+
+.category-details strong {
+    color: var(--white);
+}
+
+.category-details em {
+    color: var(--gray-400);
+    font-style: normal;
+    font-weight: 600;
+}
+
+.popia-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-lg) 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.popia-actions .btn {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    font-size: 0.9rem;
+}
+
+.popia-actions .btn-primary {
+    background: var(--primary-color);
+    color: var(--white);
+}
+
+.popia-actions .btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+}
+
+.popia-actions .btn-secondary {
+    background: var(--gray-600);
+    color: var(--white);
+}
+
+.popia-actions .btn-secondary:hover {
+    background: var(--gray-700);
+    transform: translateY(-1px);
+}
+
+.popia-actions .btn-outline {
+    background: transparent;
+    color: var(--white);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.popia-actions .btn-outline:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.privacy-link {
+    color: var(--info-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.privacy-link:hover {
+    color: var(--white);
+    text-decoration: underline;
+}
+
+.popia-footer {
+    text-align: center;
+    padding-top: var(--spacing-lg);
+}
+
+.popia-footer p {
+    color: var(--gray-400);
+    font-size: 0.8rem;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Cookie Settings Link in Footer */
+.cookie-settings-link {
+    color: var(--info-color);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.cookie-settings-link:hover {
+    color: var(--white);
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .popia-content.enhanced {
+        padding: var(--spacing-lg);
+    }
+    
+    .popia-header h3 {
+        font-size: 1.25rem;
+    }
+    
+    .category-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+    
+    .cookie-toggle {
+        font-size: 0.9rem;
+    }
+    
+    .popia-actions {
+        flex-direction: column;
+    }
+    
+    .popia-actions .btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .popia-banner.enhanced {
+        max-height: 95vh;
+    }
+    
+    .popia-content.enhanced {
+        padding: var(--spacing-md);
+    }
+    
+    .cookie-categories {
+        gap: var(--spacing-md);
+    }
+    
+    .cookie-category {
+        padding: var(--spacing-md);
+    }
+}
+
+/* Animation for banner appearance */
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.popia-banner.enhanced {
+    animation: slideDown 0.4s ease-out;
+}
+
+/* Focus styles for accessibility */
+.cookie-toggle:focus-within .toggle-slider {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+.details-toggle:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+.popia-actions .btn:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}

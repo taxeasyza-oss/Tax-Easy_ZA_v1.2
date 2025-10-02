@@ -2,21 +2,27 @@
 // Generates professional tax reports using jsPDF
 
 window.PDFGenerator = {
-    // Generate basic tax report (free)
-    generateBasicReport: function(formData, results) {
-        console.log('Generating basic tax report...');
+    // Generate professional tax report (R149 - payment required)
+    generateProfessionalReport: function(formData, results, paymentVerified = false, promoCodeUsed = false) {
+        console.log('Generating professional tax report...');
+        
+        // Verify payment or promo code before generating
+        if (!paymentVerified && !promoCodeUsed) {
+            alert('Payment verification required. Please complete payment or use a valid promotional code.');
+            return;
+        }
         
         try {
             // Import jsPDF from CDN if not already loaded
             if (typeof window.jsPDF === 'undefined') {
                 this.loadJsPDF().then(() => {
-                    this.createBasicReport(formData, results);
+                    this.createProfessionalReport(formData, results, promoCodeUsed);
                 });
             } else {
-                this.createBasicReport(formData, results);
+                this.createProfessionalReport(formData, results, promoCodeUsed);
             }
         } catch (error) {
-            console.error('Error generating basic report:', error);
+            console.error('Error generating professional report:', error);
             alert('Error generating report. Please try again.');
         }
     },
@@ -38,8 +44,8 @@ window.PDFGenerator = {
         });
     },
     
-    // Create basic report
-    createBasicReport: function(formData, results) {
+    // Create professional report with SARS eFiling codes
+    createProfessionalReport: function(formData, results, promoCodeUsed = false) {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         

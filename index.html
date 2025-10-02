@@ -10,6 +10,10 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/footer-enhancement.css">
+    <link rel="stylesheet" href="css/popia-consent.css">
+    <link rel="stylesheet" href="css/enhanced-sections.css">
+    <link rel="stylesheet" href="css/professional-report.css">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -78,23 +82,7 @@
                 <button type="button" class="btn btn-link" onclick="rotateTip()">Next Tip →</button>
             </section>
 
-            <!-- Progress Section -->
-            <section class="progress-section">
-                <div class="progress-stats">
-                    <div class="stat-item">
-                        <div class="stat-number" id="progressPercentage">3%</div>
-                        <div class="stat-label">Completed</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" id="timeRemaining">5 min</div>
-                        <div class="stat-label">Time Remaining</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" id="fieldsCompleted">1/29</div>
-                        <div class="stat-label">Fields Completed</div>
-                    </div>
-                </div>
-            </section>
+
 
             <!-- Step Indicator -->
             <div class="step-indicator">
@@ -202,16 +190,41 @@
                                 <label for="travelMethod">Travel Deduction Method <span class="tooltip-icon" data-tooltip="travel_deduction_method">?</span></label>
                                 <select id="travelMethod" name="travelMethod">
                                     <option value="fully_taxable">Fully Taxable (No Business Travel)</option>
-                                    <option value="deemed_rate">Deemed Rate (Business Km)</option>
-                                    <option value="actual_cost">Actual Cost (Detailed Logbook)</option>
+                                    <option value="deemed_rate">Deemed Rate Method (Use SARS Prescribed Rates per Km)</option>
+                                    <option value="actual_cost">Actual Cost Method (Claim All Vehicle Expenses)</option>
                                 </select>
                                 <p id="travelMethodGuidance" class="form-guidance" style="display: none;"></p>
                             </div>
                             
                             <div class="form-group" id="businessKmGroup" style="display: none;">
-                                <label for="businessKm">Business Kilometers <span class="tooltip-icon" data-tooltip="business_km">?</span></label>
+                                <label for="businessKm">Business Kilometers Traveled <span class="tooltip-icon" data-tooltip="business_km">?</span></label>
                                 <input type="number" id="businessKm" name="businessKm" placeholder="0" min="0" step="1">
-                                <p class="form-guidance">A detailed logbook is mandatory for claiming business kilometers. Ensure your logbook is SARS compliant.</p>
+                                <div class="travel-rates-info">
+                                    <h5>2025 SARS Deemed Rates:</h5>
+                                    <ul>
+                                        <li><strong>Up to 20,000 km:</strong> R4.28 per km</li>
+                                        <li><strong>20,001 to 40,000 km:</strong> R2.84 per km</li>
+                                        <li><strong>Above 40,000 km:</strong> R2.04 per km</li>
+                                    </ul>
+                                    <p class="form-guidance"><strong>Requirements:</strong> Detailed logbook mandatory showing business purpose, dates, destinations, and kilometers for each trip.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group" id="actualCostGroup" style="display: none;">
+                                <label for="actualTravelCosts">Total Actual Vehicle Costs <span class="tooltip-icon" data-tooltip="actual_travel_costs">?</span></label>
+                                <input type="number" id="actualTravelCosts" name="actualTravelCosts" placeholder="0" min="0" step="0.01">
+                                <div class="actual-cost-info">
+                                    <h5>Allowable Actual Costs Include:</h5>
+                                    <ul>
+                                        <li>Fuel costs (business portion only)</li>
+                                        <li>Maintenance and repairs</li>
+                                        <li>Insurance premiums</li>
+                                        <li>License and registration fees</li>
+                                        <li>Vehicle depreciation</li>
+                                        <li>Finance charges on vehicle loan</li>
+                                    </ul>
+                                    <p class="form-guidance"><strong>Requirements:</strong> Detailed logbook AND all receipts/invoices mandatory. Only the business-use portion is deductible.</p>
+                                </div>
                             </div>
                             
                             <div class="form-group">
@@ -285,6 +298,12 @@
                             </div>
                             
                             <div class="form-group full-width">
+                                <label for="additionalMedicalExpenses">Additional Medical Expenses <span class="tooltip-icon" data-tooltip="additional_medical_expenses">?</span></label>
+                                <input type="number" id="additionalMedicalExpenses" name="additionalMedicalExpenses" placeholder="0" min="0" step="0.01">
+                                <p class="form-guidance">Medical expenses not covered by medical aid (e.g., dental, optometry, physiotherapy, prescribed medication). Must exceed 3x your medical aid tax credits to qualify.</p>
+                            </div>
+                            
+                            <div class="form-group full-width">
                                 <label for="donations">Donations to Registered Charities (with Section 18A certificate) <span class="tooltip-icon" data-tooltip="donations">?</span></label>
                                 <input type="number" id="donations" name="donations" placeholder="0" min="0" step="0.01">
                             </div>
@@ -328,6 +347,57 @@
                             <div class="form-group">
                                 <label for="otherRenewable">Other Renewable Energy Investments <span class="tooltip-icon" data-tooltip="other_renewable">?</span></label>
                                 <input type="number" id="otherRenewable" name="otherRenewable" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <!-- Rental Property Deductions Section -->
+                            <div class="form-section-header">
+                                <h4>Rental Property Deductions <span class="tooltip-icon" data-tooltip="rental_deductions_section">?</span></h4>
+                                <p>Deductions related to rental income properties</p>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="rentalPropertyManagement">Property Management Fees <span class="tooltip-icon" data-tooltip="rental_management">?</span></label>
+                                <input type="number" id="rentalPropertyManagement" name="rentalPropertyManagement" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="rentalRepairsMaintenance">Repairs & Maintenance <span class="tooltip-icon" data-tooltip="rental_repairs">?</span></label>
+                                <input type="number" id="rentalRepairsMaintenance" name="rentalRepairsMaintenance" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="rentalInsurance">Property Insurance <span class="tooltip-icon" data-tooltip="rental_insurance">?</span></label>
+                                <input type="number" id="rentalInsurance" name="rentalInsurance" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="rentalRatesTaxes">Municipal Rates & Taxes <span class="tooltip-icon" data-tooltip="rental_rates">?</span></label>
+                                <input type="number" id="rentalRatesTaxes" name="rentalRatesTaxes" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="rentalBondInterest">Bond Interest <span class="tooltip-icon" data-tooltip="rental_bond_interest">?</span></label>
+                                <input type="number" id="rentalBondInterest" name="rentalBondInterest" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="rentalAdvertising">Advertising Costs <span class="tooltip-icon" data-tooltip="rental_advertising">?</span></label>
+                                <input type="number" id="rentalAdvertising" name="rentalAdvertising" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="rentalLegalFees">Legal Fees <span class="tooltip-icon" data-tooltip="rental_legal">?</span></label>
+                                <input type="number" id="rentalLegalFees" name="rentalLegalFees" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="rentalDepreciation">Property Depreciation <span class="tooltip-icon" data-tooltip="rental_depreciation">?</span></label>
+                                <input type="number" id="rentalDepreciation" name="rentalDepreciation" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="rentalOtherExpenses">Other Rental Expenses <span class="tooltip-icon" data-tooltip="rental_other">?</span></label>
+                                <input type="number" id="rentalOtherExpenses" name="rentalOtherExpenses" placeholder="0" min="0" step="0.01">
                             </div>
                         </div>
                     </div>
@@ -393,10 +463,45 @@
                             </div>
                         </div>
                         
-                        <div class="report-cta">
-                            <h3>Unlock Your Professional Tax Report</h3>
-                            <p>For just <strong>R149</strong>, get a comprehensive, SARS-compliant PDF report with detailed eFiling instructions, tax-saving recommendations, and a complete breakdown of your calculation. Perfect for official submissions and financial planning.</p>
-                            <button type="button" id="generateProReportBtn" class="btn btn-primary btn-lg">Get My Professional Report</button>
+                        <div class="professional-report-section">
+                            <div class="report-card professional featured">
+                                <div class="report-badge">Professional Report</div>
+                                <div class="report-header">
+                                    <h3>Professional Tax Report with SARS eFiling Codes</h3>
+                                    <div class="report-price">
+                                        <span class="currency">R</span>
+                                        <span class="amount">149</span>
+                                        <span class="period">.00</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="report-features">
+                                    <h4>What's Included:</h4>
+                                    <ul class="feature-list">
+                                        <li><span class="feature-icon">✅</span> Detailed tax calculation breakdown</li>
+                                        <li><span class="feature-icon">✅</span> SARS eFiling codes for all income and deductions</li>
+                                        <li><span class="feature-icon">✅</span> Personalized tax optimization recommendations</li>
+                                        <li><span class="feature-icon">✅</span> SARS compliance guidance and next steps</li>
+                                        <li><span class="feature-icon">✅</span> Professional PDF formatting and branding</li>
+                                        <li><span class="feature-icon">✅</span> Travel allowance optimization guide</li>
+                                        <li><span class="feature-icon">✅</span> Medical aid and retirement fund analysis</li>
+                                        <li><span class="feature-icon">✅</span> Rental income and deduction guidance</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="report-actions">
+                                    <button type="button" id="purchaseProfessionalReport" class="btn btn-primary btn-large">
+                                        <span class="btn-icon">🔒</span>
+                                        Purchase Professional Report
+                                    </button>
+                                    <div class="payment-security">
+                                        <small>
+                                            <span class="security-icon">🛡️</span>
+                                            Secure payment via PayFast | VAT Included
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -434,6 +539,7 @@
                         <li><a href="efiling-guide.html">eFiling Guide</a></li>
                         <li><a href="privacy-policy.html">Privacy Policy</a></li>
                         <li><a href="terms-of-service.html">Terms of Service</a></li>
+                        <li><a href="#" class="cookie-settings-link" onclick="window.POPIACookieConsent.showCookiePreferences(); return false;">Cookie Settings</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -451,13 +557,17 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="js/popia-cookie-consent.js"></script>
+    <script src="js/sars-compliance-data.js"></script>
     <script src="js/tax-constants.js?v=travel-fixed"></script>
     <script src="js/tax-helpers.js?v=travel-fixed"></script>
     <script src="js/tax-calculator.js?v=travel-fixed"></script>
-    <script src="js/pdf-generator.js?v=travel-fixed"></script>
+    <script src="js/professional-pdf-generator.js?v=professional-system"></script>
+    <script src="js/promotional-codes.js?v=professional-system"></script>
+    <script src="js/payfast-integration.js?v=professional-system"></script>
     <script src="js/tooltip-system.js?v=travel-fixed"></script>
     <script src="js/wizard-navigation.js?v=travel-fixed"></script>
     <script src="js/main.js?v=travel-fixed"></script>
-    <!-- Initialization is handled by main.js -->
+    <!-- Professional PDF and payment system initialization -->
 </body>
 </html>

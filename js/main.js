@@ -186,13 +186,20 @@ window.TaxEasyApp = {
     updateTravelAllowanceUI: function() {
         const travelMethodSelect = document.getElementById("travelMethod");
         const businessKmGroup = document.getElementById("businessKmGroup");
+        const actualCostGroup = document.getElementById("actualCostGroup");
         const travelMethodGuidance = document.getElementById("travelMethodGuidance");
 
         if (travelMethodSelect && businessKmGroup && travelMethodGuidance) {
             const travelMethod = travelMethodSelect.value;
 
+            // Show/hide appropriate groups based on selected method
             businessKmGroup.style.display = (travelMethod === "deemed_rate") ? "block" : "none";
+            
+            if (actualCostGroup) {
+                actualCostGroup.style.display = (travelMethod === "actual_cost") ? "block" : "none";
+            }
 
+            // Handle legacy actualTravelExpensesGroup if it exists
             const actualTravelExpensesGroup = document.getElementById("actualTravelExpensesGroup");
             if (actualTravelExpensesGroup) {
                 actualTravelExpensesGroup.style.display = (travelMethod === "actual_cost") ? "block" : "none";

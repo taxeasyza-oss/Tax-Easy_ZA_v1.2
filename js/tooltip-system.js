@@ -89,7 +89,8 @@ window.TooltipSystem = {
         const tooltipText = this.getTooltipText(element);
         if (!tooltipText) return;
         
-        this.tooltipContainer.textContent = tooltipText;
+        // Use innerHTML to support HTML content for SARS compliance info
+        this.tooltipContainer.innerHTML = tooltipText;
         this.tooltipContainer.style.display = 'block';
         this.tooltipContainer.style.visibility = 'visible';
         this.tooltipContainer.style.opacity = '1';
@@ -148,6 +149,13 @@ window.TooltipSystem = {
         // Check for data-tooltip attribute
         if (element.hasAttribute('data-tooltip')) {
             const tooltipKey = element.getAttribute('data-tooltip');
+            
+            // Try to get SARS compliance info first
+            const sarsInfo = this.getSARSComplianceTooltip(tooltipKey);
+            if (sarsInfo) {
+                return sarsInfo;
+            }
+            
             return this.tooltipContent[tooltipKey] || tooltipKey;
         }
         
@@ -158,11 +166,67 @@ window.TooltipSystem = {
                 const label = parentElement.querySelector('label, h3');
                 if (label) {
                     const fieldName = this.getFieldNameFromLabel(label.textContent);
+                    
+                    // Try to get SARS compliance info first
+                    const sarsInfo = this.getSARSComplianceTooltip(fieldName);
+                    if (sarsInfo) {
+                        return sarsInfo;
+                    }
+                    
                     return this.tooltipContent[fieldName] || 'Additional information about this field.';
                 }
             }
         }
         
+        return null;
+    },
+
+    // Get SARS compliance tooltip information
+    getSARSComplianceTooltip: function(fieldKey) {
+        if (typeof window.SARSComplianceData === 'undefined') {
+            return null;
+        }
+
+        // Map field keys to SARS compliance data
+        const fieldMappings = {
+            'basic_salary': { type: 'income', subType: '3601' },
+            'bonus': { type: 'income', subType: '3610' },
+            'overtime': { type: 'income', subType: '3615' },
+            'travel_allowance': { type: 'income', subType: '3701' },
+            'cellphone_allowance': { type: 'income', subType: '3706' },
+            'other_allowances': { type: 'income', subType: '3704' },
+            'interest_income': { type: 'income', subType: '3602' },
+            'dividend_income': { type: 'income', subType: '3602' },
+            'rental_income': { type: 'rental', subType: 'rental_income' },
+            'pension_fund': { type: 'deduction', subType: '4001' },
+            'provident_fund': { type: 'deduction', subType: '4002' },
+            'retirement_annuity': { type: 'deduction', subType: '4003' },
+            'medical_aid': { type: 'deduction', subType: '4004' },
+            'medical_members': { type: 'credit', subType: 'medical_aid_credits' },
+            'medical_dependants': { type: 'credit', subType: 'medical_aid_credits' },
+            'donations': { type: 'deduction', subType: '4006' },
+            'home_office': { type: 'deduction', subType: '4007' },
+            'professional_fees': { type: 'deduction', subType: '4008' },
+            'travel_expenses': { type: 'deduction', subType: '4009' },
+            'solar_pv': { type: 'renewable', subType: 'solar_pv' },
+            'solar_water_heating': { type: 'renewable', subType: 'solar_water_heating' },
+            'travel_deduction_method': { type: 'travel', subType: 'deemed_rate_2025' },
+            'business_km': { type: 'travel', subType: 'deemed_rate_2025' }
+        };
+
+        const mapping = fieldMappings[fieldKey];
+        if (mapping) {
+            const tooltipText = window.SARSComplianceData.getTooltipText(mapping.type, mapping.subType);
+            if (tooltipText) {
+                // Combine SARS info with existing tooltip content
+                const existingTooltip = this.tooltipContent[fieldKey];
+                if (existingTooltip) {
+                    return `${existingTooltip}<br/><br/><strong>SARS Compliance:</strong><br/>${tooltipText}`;
+                }
+                return tooltipText;
+            }
+        }
+
         return null;
     },
     

@@ -55,10 +55,18 @@ window.WizardNavigation = {
         this.updateNavigation();
         this.updateProgress();
         
-        // Scroll to top of wizard
+        // Scroll to top of page
+        window.scrollTo({ 
+            top: 0, 
+            behavior: 'smooth' 
+        });
+        
+        // Also scroll wizard container into view as fallback
         const wizardContainer = document.querySelector('.wizard-container');
         if (wizardContainer) {
-            wizardContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(() => {
+                wizardContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
         }
         
         // If we're on the summary step, calculate and display results
