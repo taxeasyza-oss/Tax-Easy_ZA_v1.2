@@ -52,6 +52,9 @@
         </div>
     </header>
 
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container"></div>
+
     <!-- Main Content -->
     <main class="main">
         <div class="container">
@@ -194,6 +197,20 @@
                                 <label for="travelAllowance">Travel Allowance <span class="tooltip-icon" data-tooltip="travel_allowance">?</span></label>
                                 <input type="number" id="travelAllowance" name="travelAllowance" placeholder="0" min="0" step="0.01">
                             </div>
+
+                            <div class="form-group">
+                                <label for="travelMethod">Travel Deduction Method <span class="tooltip-icon" data-tooltip="travel_deduction_method">?</span></label>
+                                <select id="travelMethod" name="travelMethod">
+                                    <option value="fully_taxable">Fully Taxable (No Business Travel)</option>
+                                    <option value="deemed_rate">Deemed Rate (Business Km)</option>
+                                    <option value="actual_cost">Actual Cost (Detailed Logbook)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group" id="businessKmGroup" style="display: none;">
+                                <label for="businessKm">Business Kilometers <span class="tooltip-icon" data-tooltip="business_km">?</span></label>
+                                <input type="number" id="businessKm" name="businessKm" placeholder="0" min="0" step="1">
+                            </div>
                             
                             <div class="form-group">
                                 <label for="cellphoneAllowance">Cellphone Allowance <span class="tooltip-icon" data-tooltip="cellphone_allowance">?</span></label>
@@ -266,7 +283,7 @@
                             </div>
                             
                             <div class="form-group full-width">
-                                <label for="donations">Donations (Section 18A) <span class="tooltip-icon" data-tooltip="donations">?</span></label>
+                                <label for="donations">Donations to Registered Charities (with Section 18A certificate) <span class="tooltip-icon" data-tooltip="donations">?</span></label>
                                 <input type="number" id="donations" name="donations" placeholder="0" min="0" step="0.01">
                             </div>
                         </div>
@@ -276,164 +293,138 @@
                     <div class="wizard-step" data-step="4">
                         <div class="step-header">
                             <h3>Advanced Deductions <span class="tooltip-icon" data-tooltip="advanced_deductions_title">?</span></h3>
-                            <p>Additional deductions and renewable energy investments</p>
+                            <p>Additional deductions for specific circumstances</p>
                         </div>
                         
                         <div class="form-grid">
                             <div class="form-group">
                                 <label for="homeOffice">Home Office Expenses <span class="tooltip-icon" data-tooltip="home_office">?</span></label>
-                                <input type="number" id="homeOffice" name="homeOffice" placeholder="0" min="0" max="15000" step="0.01">
+                                <input type="number" id="homeOffice" name="homeOffice" placeholder="0" min="0" step="0.01">
                             </div>
                             
                             <div class="form-group">
-                                <label for="occupationSpecificDeductions">Occupation Specific Deductions <span class="tooltip-icon" data-tooltip="occupation_specific_deductions">?</span></label>
-                                <input type="number" id="occupationSpecificDeductions" name="occupationSpecificDeductions" placeholder="0" min="0" step="0.01">
+                                <label for="travelExpenses">Travel Expenses (Logbook) <span class="tooltip-icon" data-tooltip="travel_km_allowance">?</span></label>
+                                <input type="number" id="travelExpenses" name="travelExpenses" placeholder="0" min="0" step="0.01">
                             </div>
                             
                             <div class="form-group">
-                                <label for="travelKmAllowance">Travel Kilometers (Business) <span class="tooltip-icon" data-tooltip="travel_km_allowance">?</span></label>
-                                <input type="number" id="travelKmAllowance" name="travelKmAllowance" placeholder="0" min="0" step="1">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="professionalFees">Professional Fees <span class="tooltip-icon" data-tooltip="professional_fees">?</span></label>
+                                <label for="professionalFees">Professional Fees & Subscriptions <span class="tooltip-icon" data-tooltip="professional_fees">?</span></label>
                                 <input type="number" id="professionalFees" name="professionalFees" placeholder="0" min="0" step="0.01">
                             </div>
                             
                             <div class="form-group">
-                                <label for="solarPV">Solar PV Investment <span class="tooltip-icon" data-tooltip="solar_pv">?</span></label>
-                                <input type="number" id="solarPV" name="solarPV" placeholder="0" min="0" max="1000000" step="0.01">
+                                <label for="solarPV">Solar PV Installation Costs <span class="tooltip-icon" data-tooltip="solar_pv">?</span></label>
+                                <input type="number" id="solarPV" name="solarPV" placeholder="0" min="0" step="0.01">
                             </div>
                             
                             <div class="form-group">
-                                <label for="solarWaterHeating">Solar Water Heating <span class="tooltip-icon" data-tooltip="solar_water_heating">?</span></label>
+                                <label for="solarWaterHeating">Solar Water Heating Costs <span class="tooltip-icon" data-tooltip="solar_water_heating">?</span></label>
                                 <input type="number" id="solarWaterHeating" name="solarWaterHeating" placeholder="0" min="0" step="0.01">
                             </div>
                             
                             <div class="form-group">
-                                <label for="otherRenewable">Other Renewable Energy <span class="tooltip-icon" data-tooltip="other_renewable">?</span></label>
+                                <label for="otherRenewable">Other Renewable Energy Investments <span class="tooltip-icon" data-tooltip="other_renewable">?</span></label>
                                 <input type="number" id="otherRenewable" name="otherRenewable" placeholder="0" min="0" step="0.01">
                             </div>
                         </div>
                     </div>
 
-                    <!-- Step 5: Summary and Results -->
+                    <!-- Step 5: Summary & Results -->
                     <div class="wizard-step" data-step="5">
                         <div class="step-header">
-                            <h3>Tax Calculation Summary <span class="tooltip-icon" data-tooltip="summary_title">?</span></h3>
-                            <p>Review your complete tax calculation and generate reports</p>
+                            <h3>Calculation Summary <span class="tooltip-icon" data-tooltip="summary_title">?</span></h3>
+                            <p>Review your tax calculation results below</p>
                         </div>
                         
-                        <div class="results-container">
-                            <div class="calculation-summary">
+                        <div class="summary-container">
+                            <div class="summary-section">
+                                <h4>Income Breakdown</h4>
                                 <div class="summary-item">
-                                    <span class="label">Gross Income:</span>
-                                    <span id="grossIncomeDisplay" class="amount">R0</span>
+                                    <span>Gross Income:</span>
+                                    <span id="summaryGrossIncome">R0</span>
                                 </div>
                                 <div class="summary-item">
-                                    <span class="label">Total Deductions:</span>
-                                    <span id="totalDeductionsDisplay" class="amount">R0</span>
+                                    <span>Total Deductions:</span>
+                                    <span id="summaryDeductions">R0</span>
                                 </div>
-                                <div class="summary-item">
-                                    <span class="label">Taxable Income:</span>
-                                    <span id="taxableIncomeDisplay" class="amount">R0</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="label">Tax Before Rebates:</span>
-                                    <span id="taxBeforeRebatesDisplay" class="amount">R0</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="label">Tax Rebates:</span>
-                                    <span id="taxRebatesDisplay" class="amount">R0</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="label">Medical Credits:</span>
-                                    <span id="medicalCreditsDisplay" class="amount">R0</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="label">Net Tax Payable:</span>
-                                    <span id="netTaxPayableDisplay" class="amount">R0</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="label">Taxes Already Paid:</span>
-                                    <span id="taxesPaidDisplay" class="amount">R0</span>
-                                </div>
-                                
-                                <div class="final-result">
-                                    <span id="resultLabel">Amount Due/Refund:</span>
-                                    <span id="finalResult" class="result-amount">R0</span>
+                                <div class="summary-item highlight">
+                                    <span>Taxable Income:</span>
+                                    <span id="summaryTaxableIncome">R0</span>
                                 </div>
                             </div>
                             
-                            <div class="report-actions" style="display: none;">
-                                <h4>Generate Your Tax Report</h4>
-                                <div class="report-cards">
-                                    <div class="report-card professional">
-                                        <h5>Professional Report - R149</h5>
-                                        <ul>
-                                            <li>Comprehensive tax analysis</li>
-                                            <li>Detailed deductions breakdown</li>
-                                            <li>Tax planning recommendations</li>
-                                            <li>eFiling instructions</li>
-                                            <li>Professional formatting</li>
-                                        </ul>
-                                        <div class="discount-code-section">
-                                            <label for="discountCode">Discount Code (Optional):</label>
-                                            <input type="text" id="discountCode" name="discountCode" placeholder="Enter discount code">
-                                            <button type="button" class="btn btn-secondary" onclick="applyDiscount()">Apply</button>
-                                        </div>
-                                        <div class="price-display">
-                                            <span class="original-price" id="originalPrice">R149</span>
-                                            <span class="final-price" id="finalPrice">R149</span>
-                                        </div>
-                                        <button type="button" class="btn btn-success" onclick="purchaseProfessionalReport()">
-                                            Purchase Professional Report
-                                        </button>
-                                    </div>
+                            <div class="summary-section">
+                                <h4>Tax Calculation</h4>
+                                <div class="summary-item">
+                                    <span>Tax Before Rebates:</span>
+                                    <span id="summaryTaxBeforeRebates">R0</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span>Rebates (Primary, Secondary, Tertiary):</span>
+                                    <span id="summaryRebates">R0</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span>Tax After Rebates:</span>
+                                    <span id="summaryTaxAfterRebates">R0</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span>Medical Aid Credits:</span>
+                                    <span id="summaryMedicalCredits">R0</span>
+                                </div>
+                                <div class="summary-item highlight">
+                                    <span>Net Tax Payable:</span>
+                                    <span id="summaryNetTax">R0</span>
                                 </div>
                             </div>
+                            
+                            <div class="summary-section">
+                                <h4>Final Result</h4>
+                                <div class="summary-item">
+                                    <span>Taxes Already Paid (PAYE):</span>
+                                    <span id="summaryTaxesPaid">R0</span>
+                                </div>
+                                <div class="final-result-container">
+                                    <div id="resultLabel" class="result-label">Estimated Refund:</div>
+                                    <div id="finalResult" class="result-amount refund">R0</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="report-cta">
+                            <h3>Unlock Your Professional Tax Report</h3>
+                            <p>For just <strong>R149</strong>, get a comprehensive, SARS-compliant PDF report with detailed eFiling instructions, tax-saving recommendations, and a complete breakdown of your calculation. Perfect for official submissions and financial planning.</p>
+                            <button type="button" id="generateProReportBtn" class="btn btn-primary btn-lg">Get My Professional Report</button>
                         </div>
                     </div>
 
                     <!-- Navigation -->
                     <div class="wizard-navigation">
-                        <button type="button" id="prevBtn" class="btn btn-secondary" onclick="previousStep()">
-                            ← Previous
-                        </button>
-                        <button type="button" id="nextBtn" class="btn btn-primary" onclick="nextStep()">
-                            Next →
-                        </button>
+                        <button type="button" id="prevBtn" class="btn btn-secondary">← Previous</button>
+                        <button type="button" id="nextBtn" class="btn btn-primary">Next →</button>
                     </div>
                 </form>
             </div>
+
+            <!-- Disclaimer -->
+            <section class="disclaimer-section">
+                <h4>⚠️ IMPORTANT DISCLAIMER</h4>
+                <p>
+                    <strong>This calculator provides estimates only.</strong> While we strive for 100% SARS compliance using official 2025 tax tables, your actual tax liability may differ based on individual circumstances. This tool does not constitute professional tax advice. For complex tax situations, consult a registered tax practitioner. Always verify calculations with official SARS resources. Keep all supporting documents for SARS verification. TaxEasy ZA is not liable for any decisions made based on these calculations.
+                </p>
+            </section>
         </div>
     </main>
-
-    <!-- Important Disclaimer -->
-    <div class="disclaimer-section" style="background: #fef3c7; border: 2px solid #f59e0b; margin: 20px 0; padding: 20px; border-radius: 8px;">
-        <div class="container">
-            <h4 style="color: #92400e; margin-bottom: 10px;">⚠️ IMPORTANT DISCLAIMER</h4>
-            <p style="color: #92400e; font-size: 14px; line-height: 1.6; margin: 0;">
-                <strong>This calculator provides estimates only.</strong> While we strive for 100% SARS compliance using official 2025 tax tables, 
-                your actual tax liability may differ based on individual circumstances. This tool does not constitute professional tax advice. 
-                For complex tax situations, consult a registered tax practitioner. Always verify calculations with official SARS resources. 
-                Keep all supporting documents for SARS verification. TaxEasy ZA is not liable for any decisions made based on these calculations.
-            </p>
-        </div>
-    </div>
 
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-section">
+                <div class="footer-col">
                     <h4>TaxEasy ZA</h4>
                     <p>Professional South African tax calculator for the 2025 tax year. 100% SARS compliant calculations using official tax tables.</p>
-                    <p style="font-size: 12px; color: #6b7280; margin-top: 10px;">
-                        <strong>Disclaimer:</strong> Estimates only. Not professional tax advice. Verify with SARS.
-                    </p>
+                    <p class="disclaimer">Disclaimer: Estimates only. Not professional tax advice. Verify with SARS.</p>
                 </div>
-                <div class="footer-section">
+                <div class="footer-col">
                     <h4>Quick Links</h4>
                     <ul>
                         <li><a href="faq.html">FAQ</a></li>
@@ -442,18 +433,16 @@
                         <li><a href="terms-of-service.html">Terms of Service</a></li>
                     </ul>
                 </div>
-                <div class="footer-section">
+                <div class="footer-col">
                     <h4>Contact & Support</h4>
                     <p>For support and inquiries, please visit our FAQ section first.</p>
-                    <p style="font-size: 12px; color: #6b7280;">
-                        SARS Contact Centre: 0800 00 7277<br>
-                        SARS eFiling: www.sarsefiling.co.za<br>
-                        Email: <a href="mailto:taxeasyza@gmail.com">taxeasyza@gmail.com</a>
-                    </p>
+                    <p>SARS Contact Centre: 0800 00 7277</p>
+                    <p>SARS eFiling: <a href="https://www.sarsefiling.co.za" target="_blank" rel="noopener noreferrer">www.sarsefiling.co.za</a></p>
+                    <p>Email: <a href="mailto:taxeasyza@gmail.com">taxeasyza@gmail.com</a></p>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 TaxEasy ZA. All rights reserved. SARS compliant tax calculator using official 2025 tax tables.</p>
+                <p>&copy; 2025 TaxEasy ZA. All rights reserved. SARS compliant.</p>
             </div>
         </div>
     </footer>
@@ -461,18 +450,12 @@
     <!-- Scripts -->
     <script src="js/tax-constants.js"></script>
     <script src="js/tax-calculator.js"></script>
-    <script src="js/tax-optimizer.js"></script>
     <script src="js/wizard-navigation.js"></script>
     <script src="js/tooltip-system.js"></script>
     <script src="js/pdf-generator.js"></script>
     <script src="js/payment-integration.js"></script>
     <script src="js/main.js"></script>
-    
-    <script>
-        // Initialize the application
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('TaxEasy ZA 2025 - Application starting...');
-        });
-    </script>
+
 </body>
 </html>
+

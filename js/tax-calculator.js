@@ -68,7 +68,7 @@ window.TaxCalculator = {
             basicSalary: window.TAX_HELPERS.cleanNumericInput(formData.basicSalary),
             bonus: window.TAX_HELPERS.cleanNumericInput(formData.bonus),
             overtime: window.TAX_HELPERS.cleanNumericInput(formData.overtime),
-            travelAllowance: window.TAX_HELPERS.cleanNumericInput(formData.travelAllowance),
+            travelAllowance: this.calculateTravelAllowance(formData),
             cellphoneAllowance: window.TAX_HELPERS.cleanNumericInput(formData.cellphoneAllowance),
             otherAllowances: window.TAX_HELPERS.cleanNumericInput(formData.otherAllowances),
             interestIncome: this.calculateTaxableInterest(formData),
@@ -170,6 +170,33 @@ window.TaxCalculator = {
         return Math.min(solarPV, limit);
     },
     
+    // Calculate travel allowance deduction
+    calculateTravelAllowance: function(formData) {
+        const allowance = window.TAX_HELPERS.cleanNumericInput(formData.travelAllowance);
+        const businessKm = window.TAX_HELPERS.cleanNumericInput(formData.businessKm);
+        const travelMethod = formData.travelMethod;
+
+        if (travelMethod === 'actual_cost') {
+            // For actual cost, the allowance is fully taxable, and expenses are deducted later.
+            // For now, we just return the allowance as taxable income.
+            return allowance;
+        } else if (travelMethod === 'deemed_rate' && businessKm > 0) {
+            // For deemed rate, a portion of the allowance is non-taxable based on business km.
+            // This is a simplified example; actual SARS rules are more complex.
+            const deemedRatePerKm = 4.76; // SARS prescribed rate per km for 2025
+            // According to SARS, a portion of the travel allowance is non-taxable based on business km.
+            // The non-taxable portion is calculated as business km * deemed rate.
+            // The taxable portion is the allowance minus the non-taxable portion, but not less than 20% of the allowance.
+            // This is a simplified interpretation for the calculator. Actual SARS rules are more complex and depend on various factors.
+            const nonTaxablePortion = Math.min(allowance, businessKm * deemedRatePerKm);
+            const taxablePortion = Math.max(allowance - nonTaxablePortion, allowance * 0.20); // At least 20% of the allowance is always taxable
+            return taxablePortion;
+        } else {
+            // Default to fully taxable if no specific method or business km provided
+            return allowance;
+        }
+    },
+
     // Calculate solar water heating deduction
     calculateSolarWaterHeatingDeduction: function(formData) {
         const cost = window.TAX_HELPERS.cleanNumericInput(formData.solarWaterHeating);

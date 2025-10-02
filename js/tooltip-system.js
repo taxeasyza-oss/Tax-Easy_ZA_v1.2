@@ -7,7 +7,8 @@ window.TooltipSystem = {
     
     // Initialize tooltip system
     init: function() {
-        console.log('Initializing tooltip system...');
+        console.log("Initializing tooltip system...");
+        console.log("TooltipSystem object:", this);
         
         this.createTooltipContainer();
         this.setupEventListeners();
@@ -36,6 +37,7 @@ window.TooltipSystem = {
             word-wrap: break-word;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             font-family: 'Inter', sans-serif;
+            display: none; /* Initially hidden */
         `;
         document.body.appendChild(this.tooltipContainer);
     },
@@ -74,7 +76,7 @@ window.TooltipSystem = {
         if (!tooltipText) return;
         
         this.tooltipContainer.textContent = tooltipText;
-        this.tooltipContainer.style.opacity = '1';
+        this.tooltipContainer.classList.add('visible');
         this.currentTooltip = element;
         
         this.positionTooltip(event);
@@ -82,7 +84,7 @@ window.TooltipSystem = {
     
     // Hide tooltip
     hideTooltip: function() {
-        this.tooltipContainer.style.opacity = '0';
+        this.tooltipContainer.classList.remove('visible');
         this.currentTooltip = null;
     },
     
@@ -161,6 +163,8 @@ window.TooltipSystem = {
             'bonus': 'Any bonus payments received during the tax year. Include 13th cheques, performance bonuses, and similar payments.',
             'overtime': 'Total overtime payments received during the tax year. This is typically shown separately on your IRP5.',
             'travel_allowance': 'Annual travel allowance received from your employer. This may be partially taxable depending on usage. If you use a company car, ensure you understand the fringe benefit tax implications. Keep a detailed logbook for business travel.',
+            'travel_deduction_method': 'Select the method you use to claim travel deductions. \'Fully Taxable\' means no business travel. \'Deemed Rate\' uses SARS prescribed rates per km for business travel with a logbook. \'Actual Cost\' requires a detailed logbook and proof of all travel-related expenses.',
+            'business_km': 'Enter the total business kilometers traveled during the tax year. This is crucial for calculating the non-taxable portion of your travel allowance under the deemed rate method. A detailed logbook is mandatory.',
             'cellphone_allowance': 'Annual cellphone allowance provided by your employer for business use.',
             'other_allowances': 'Any other allowances not listed above, such as housing, entertainment, or tool allowances.',
             'interest_income': 'Interest earned from bank accounts, investments, and loans. The first R23,800 (R34,500 for 65+) is tax-free.',

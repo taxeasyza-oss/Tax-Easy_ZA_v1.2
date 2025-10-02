@@ -78,7 +78,9 @@ window.TAX_CONSTANTS_2025 = {
         donations_percentage: 0.10,             // 10% of taxable income
         
         // Travel allowance
-        travel_allowance_rate_per_km: 3.98,     // Rate per km for 2025
+    TRAVEL_RATES: {
+        deemed_rate_per_km: 4.76, // SARS prescribed rate per km for 2025
+    },
         
         // Medical expenses (above medical aid contributions)
         medical_expenses_threshold_percentage: 0.075, // 7.5% of taxable income

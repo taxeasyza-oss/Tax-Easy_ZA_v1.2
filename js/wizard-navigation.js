@@ -159,7 +159,7 @@ window.WizardNavigation = {
         stepIndicators.forEach((indicator, index) => {
             indicator.addEventListener('click', () => {
                 const targetStep = index + 1;
-                if (targetStep <= this.currentStep || this.validateStep(this.currentStep)) {
+                if (targetStep <= this.currentStep || (targetStep === this.currentStep + 1 && this.validateStep(this.currentStep))) {
                     this.showStep(targetStep);
                 }
             });
@@ -307,7 +307,11 @@ window.WizardNavigation = {
     
     // Show validation errors
     showValidationErrors: function(errors) {
-        alert('Please correct the following errors:\n\n' + errors.join('\n'));
+        if (window.TaxEasyApp && window.TaxEasyApp.showNotification) {
+            window.TaxEasyApp.showNotification("Please correct the following errors: " + errors.join(", "), "error");
+        } else {
+            alert("Please correct the following errors:\n\n" + errors.join("\n"));
+        }
     },
     
     // Email validation

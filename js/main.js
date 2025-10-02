@@ -56,6 +56,7 @@ window.TaxEasyApp = {
         // Initialize tooltip system
         if (typeof window.TooltipSystem !== 'undefined') {
             window.TooltipSystem.init();
+            window.TooltipSystem = TooltipSystem;
         }
         
         // Initialize payment integration
@@ -103,10 +104,22 @@ window.TaxEasyApp = {
             this.handleKeyboardShortcuts(e);
         });
         
-        // Handle form auto-save
-        document.addEventListener('input', (e) => {
-            if (e.target.closest('#taxCalculatorForm')) {
+        // Handle form auto-save and dynamic field visibility
+        document.addEventListener("input", (e) => {
+            if (e.target.closest("#taxCalculatorForm")) {
                 this.scheduleAutoSave();
+
+                // Handle travel method change for dynamic field visibility
+                if (e.target.id === 'travelMethod') {
+                    const businessKmGroup = document.getElementById('businessKmGroup');
+                    if (businessKmGroup) {
+                        if (e.target.value === 'deemed_rate') {
+                            businessKmGroup.style.display = 'block';
+                        } else {
+                            businessKmGroup.style.display = 'none';
+                        }
+                    }
+                }
             }
         });
     },
@@ -472,6 +485,29 @@ window.TaxEasyApp = {
         };
     },
     
+    // Show a notification message
+    showNotification: function(message, type = 'info', duration = 5000) {
+        const notificationContainer = document.getElementById('notificationContainer');
+        if (!notificationContainer) {
+            console.warn('Notification container not found.');
+            return;
+        }
+
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+
+        notificationContainer.appendChild(notification);
+
+        // Automatically remove the notification after a duration
+        setTimeout(() => {
+            notification.classList.add('hide');
+            notification.addEventListener('transitionend', () => {
+                notification.remove();
+            });
+        }, duration);
+    },
+
     // Apply user preferences
     applyUserPreferences: function() {
         // Apply theme
