@@ -22,51 +22,65 @@ window.TooltipSystem = {
         this.tooltipContainer = document.createElement('div');
         this.tooltipContainer.className = 'tooltip-container';
         this.tooltipContainer.style.cssText = `
-            position: absolute;
+            position: fixed;
             z-index: 10000;
             pointer-events: none;
             opacity: 0;
             transition: opacity 0.2s ease-in-out;
             background: #1f2937;
             color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
+            padding: 12px 16px;
+            border-radius: 8px;
             font-size: 14px;
-            line-height: 1.4;
-            max-width: 300px;
+            line-height: 1.5;
+            max-width: 320px;
             word-wrap: break-word;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            font-family: 'Inter', sans-serif;
-            display: none; /* Initially hidden */
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            display: none;
+            visibility: hidden;
         `;
         document.body.appendChild(this.tooltipContainer);
     },
     
     // Setup event listeners
     setupEventListeners: function() {
-        // Handle tooltip icons
-        document.addEventListener('mouseenter', (e) => {
-            if (e.target.classList.contains('tooltip-icon') || e.target.hasAttribute('data-tooltip')) {
-                this.showTooltip(e.target, e);
-            }
-        }, true);
-        
-        document.addEventListener('mouseleave', (e) => {
-            if (e.target.classList.contains('tooltip-icon') || e.target.hasAttribute('data-tooltip')) {
-                this.hideTooltip();
-            }
-        }, true);
-        
-        // Handle mouse movement for tooltip positioning
-        document.addEventListener('mousemove', (e) => {
-            if (this.currentTooltip) {
-                this.positionTooltip(e);
+        // Use event delegation for better performance
+        document.body.addEventListener("mouseover", e => {
+            const trigger = e.target.closest(".tooltip-icon, [data-tooltip]");
+            if (trigger) {
+                this.showTooltip(trigger, e);
             }
         });
-        
-        // Hide tooltip on scroll
-        document.addEventListener('scroll', () => {
-            this.hideTooltip();
+
+        document.body.addEventListener("mouseout", e => {
+            const trigger = e.target.closest(".tooltip-icon, [data-tooltip]");
+            if (trigger) {
+                this.hideTooltip();
+            }
+        });
+
+        document.body.addEventListener("click", e => {
+            const trigger = e.target.closest(".tooltip-icon, [data-tooltip]");
+            if (trigger) {
+                // Toggle tooltip on click for touch devices
+                if (this.currentTooltip === trigger) {
+                    this.hideTooltip();
+                } else {
+                    this.showTooltip(trigger, e);
+                }
+            }
+        });
+
+        // Hide on scroll and resize for robustness
+        window.addEventListener("scroll", () => this.hideTooltip(), true);
+        window.addEventListener("resize", () => this.hideTooltip(), true);
+
+        // Accessibility: Hide with Escape key
+        document.addEventListener("keydown", e => {
+            if (e.key === "Escape" && this.currentTooltip) {
+                this.hideTooltip();
+            }
         });
     },
     
@@ -76,15 +90,28 @@ window.TooltipSystem = {
         if (!tooltipText) return;
         
         this.tooltipContainer.textContent = tooltipText;
-        this.tooltipContainer.classList.add('visible');
+        this.tooltipContainer.style.display = 'block';
+        this.tooltipContainer.style.visibility = 'visible';
+        this.tooltipContainer.style.opacity = '1';
         this.currentTooltip = element;
         
-        this.positionTooltip(event);
+        // Position tooltip after making it visible so dimensions are correct
+        setTimeout(() => {
+            this.positionTooltip(event);
+        }, 0);
     },
     
     // Hide tooltip
     hideTooltip: function() {
-        this.tooltipContainer.classList.remove('visible');
+        if (!this.tooltipContainer) return;
+        
+        this.tooltipContainer.style.opacity = '0';
+        this.tooltipContainer.style.visibility = 'hidden';
+        setTimeout(() => {
+            if (this.tooltipContainer) {
+                this.tooltipContainer.style.display = 'none';
+            }
+        }, 200); // Match transition duration
         this.currentTooltip = null;
     },
     

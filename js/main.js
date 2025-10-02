@@ -49,19 +49,28 @@ window.TaxEasyApp = {
         console.log('Initializing application modules...');
         
         // Initialize wizard navigation
-        if (typeof window.WizardNavigation !== 'undefined') {
+        if (typeof window.WizardNavigation !== 'undefined' && window.WizardNavigation) {
+            console.log('Initializing wizard navigation...');
             window.WizardNavigation.init();
+        } else {
+            console.error('WizardNavigation not found - cannot initialize application');
+            throw new Error('WizardNavigation module is not loaded');
         }
         
         // Initialize tooltip system
-        if (typeof window.TooltipSystem !== 'undefined') {
+        if (typeof window.TooltipSystem !== 'undefined' && window.TooltipSystem) {
+            console.log('Initializing tooltip system...');
             window.TooltipSystem.init();
-            window.TooltipSystem = TooltipSystem;
+        } else {
+            console.warn('TooltipSystem not found - tooltips will not work');
         }
         
         // Initialize payment integration
-        if (typeof window.PaymentIntegration !== 'undefined') {
+        if (typeof window.PaymentIntegration !== 'undefined' && window.PaymentIntegration) {
+            console.log('Initializing payment integration...');
             window.PaymentIntegration.init();
+        } else {
+            console.warn('PaymentIntegration not found - payment features will not work');
         }
         
         console.log('All modules initialized successfully');
@@ -104,24 +113,52 @@ window.TaxEasyApp = {
             this.handleKeyboardShortcuts(e);
         });
         
-        // Handle form auto-save and dynamic field visibility
+        // Handle form auto-save
         document.addEventListener("input", (e) => {
             if (e.target.closest("#taxCalculatorForm")) {
                 this.scheduleAutoSave();
-
-                // Handle travel method change for dynamic field visibility
+            }
+        });
+        
+        // Handle dropdown changes (change event for select elements)
+        document.addEventListener("change", (e) => {
+            if (e.target.closest("#taxCalculatorForm")) {
+                this.scheduleAutoSave();
+                
+                // Handle travel method change for dynamic field visibility and guidance
                 if (e.target.id === 'travelMethod') {
-                    const businessKmGroup = document.getElementById('businessKmGroup');
-                    if (businessKmGroup) {
-                        if (e.target.value === 'deemed_rate') {
-                            businessKmGroup.style.display = 'block';
-                        } else {
-                            businessKmGroup.style.display = 'none';
-                        }
-                    }
+                    this.handleTravelMethodChange(e.target.value);
                 }
             }
         });
+    },
+    
+    // Handle travel method change
+    handleTravelMethodChange: function(travelMethod) {
+        const businessKmGroup = document.getElementById('businessKmGroup');
+        const travelMethodGuidance = document.getElementById('travelMethodGuidance');
+        const actualTravelExpensesGroup = document.getElementById('actualTravelExpensesGroup');
+
+        // Show/hide business kilometers field
+        if (businessKmGroup) {
+            businessKmGroup.style.display = (travelMethod === 'deemed_rate') ? 'block' : 'none';
+        }
+
+        // Show/hide actual travel expenses field
+        if (actualTravelExpensesGroup) {
+            actualTravelExpensesGroup.style.display = (travelMethod === 'actual_cost') ? 'block' : 'none';
+        }
+
+        // Update guidance text
+        if (travelMethodGuidance) {
+            const guidanceText = this.travelGuidanceMessages[travelMethod];
+            if (guidanceText) {
+                travelMethodGuidance.textContent = guidanceText;
+                travelMethodGuidance.style.display = 'block';
+            } else {
+                travelMethodGuidance.style.display = 'none';
+            }
+        }
     },
     
     // Initialize UI components
@@ -140,8 +177,37 @@ window.TaxEasyApp = {
         
         // Initialize accessibility features
         this.initializeAccessibility();
+
+        // Set initial state for travel allowance UI
+        this.updateTravelAllowanceUI();
     },
     
+    // Update travel allowance UI based on selected method
+    updateTravelAllowanceUI: function() {
+        const travelMethodSelect = document.getElementById("travelMethod");
+        const businessKmGroup = document.getElementById("businessKmGroup");
+        const travelMethodGuidance = document.getElementById("travelMethodGuidance");
+
+        if (travelMethodSelect && businessKmGroup && travelMethodGuidance) {
+            const travelMethod = travelMethodSelect.value;
+
+            businessKmGroup.style.display = (travelMethod === "deemed_rate") ? "block" : "none";
+
+            const actualTravelExpensesGroup = document.getElementById("actualTravelExpensesGroup");
+            if (actualTravelExpensesGroup) {
+                actualTravelExpensesGroup.style.display = (travelMethod === "actual_cost") ? "block" : "none";
+            }
+
+            const guidanceText = this.travelGuidanceMessages[travelMethod];
+            if (guidanceText) {
+                travelMethodGuidance.textContent = guidanceText;
+                travelMethodGuidance.style.display = "block";
+            } else {
+                travelMethodGuidance.style.display = "none";
+            }
+        }
+    },
+
     // Initialize POPIA consent management
     initializePopiaConsent: function() {
         const consent = localStorage.getItem('popiaConsent');
@@ -521,6 +587,13 @@ window.TaxEasyApp = {
         }
     },
     
+    // Travel allowance guidance messages
+    travelGuidanceMessages: {
+        fully_taxable: "If you receive a travel allowance but do not use your private vehicle for business purposes, or do not keep a logbook, the full allowance will be taxed. No deduction can be claimed.",
+        deemed_rate: "This method uses SARS-prescribed rates per kilometer for business travel. You MUST keep a detailed logbook to claim this deduction. The non-taxable portion is calculated based on your business kilometers.",
+        actual_cost: "This method allows you to claim actual costs incurred for business travel. You MUST keep a detailed logbook and all receipts for fuel, maintenance, insurance, and depreciation. This method is more complex but can result in higher deductions if your actual costs exceed the deemed rate."
+    },
+
     // Setup error handling
     setupErrorHandling: function() {
         window.addEventListener('error', (e) => {
@@ -548,18 +621,41 @@ window.TaxEasyApp = {
     // Handle initialization errors
     handleInitializationError: function(error) {
         console.error('Initialization error:', error);
+        console.error('Error stack:', error.stack);
+        console.error('Error message:', error.message);
         
-        // Show fallback UI
-        document.body.innerHTML = `
-            <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
-                <h1>TaxEasy ZA</h1>
-                <p>Sorry, there was an error loading the application.</p>
-                <p>Please refresh the page and try again.</p>
-                <button onclick="location.reload()" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        // Log the error for debugging
+        this.logError(error);
+        
+        // Try to show error in a less destructive way
+        const mainElement = document.querySelector('.main');
+        if (mainElement) {
+            // Insert error message at the top of main content
+            const errorDiv = document.createElement('div');
+            errorDiv.style.cssText = 'background: #fee; border: 2px solid #c00; padding: 20px; margin: 20px; border-radius: 8px; text-align: center;';
+            errorDiv.innerHTML = `
+                <h2 style="color: #c00; margin: 0 0 10px 0;">Initialization Error</h2>
+                <p>There was an error loading the application: ${error.message}</p>
+                <p style="font-size: 0.9em; color: #666;">Check the browser console for more details.</p>
+                <button onclick="location.reload()" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px;">
                     Refresh Page
                 </button>
-            </div>
-        `;
+            `;
+            mainElement.insertBefore(errorDiv, mainElement.firstChild);
+        } else {
+            // Fallback: replace entire body only if we can't find main element
+            document.body.innerHTML = `
+                <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+                    <h1>TaxEasy ZA</h1>
+                    <p>Sorry, there was an error loading the application.</p>
+                    <p style="color: #c00;">${error.message}</p>
+                    <p>Please refresh the page and try again.</p>
+                    <button onclick="location.reload()" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        Refresh Page
+                    </button>
+                </div>
+            `;
+        }
     },
     
     // Log error for debugging
@@ -586,45 +682,33 @@ window.TaxEasyApp = {
     
     // Show notification
     notificationTimeout: null,
-    showNotification: function(message, type = 'info') {
-        if (!this.userPreferences.notifications) return;
+    showNotification: function(message, type = 'info', duration = 3000) {
+        // Check if notifications are enabled in user preferences
+        if (this.userPreferences && !this.userPreferences.notifications) return;
 
-        // Clear any existing notification timeout to prevent rapid-fire notifications
-        clearTimeout(this.notificationTimeout);
-
-        // Remove any existing notification elements to prevent stacking
-        const existingNotification = document.querySelector('.notification');
-        if (existingNotification) {
-            existingNotification.remove();
+        // Create a container for notifications if it doesn't exist
+        let notificationContainer = document.querySelector('.notification-container');
+        if (!notificationContainer) {
+            notificationContainer = document.createElement('div');
+            notificationContainer.className = 'notification-container';
+            document.body.appendChild(notificationContainer);
         }
-        
+
         // Create notification element
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
         notification.textContent = message;
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 12px 20px;
-            background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#3b82f6'};
-            color: white;
-            border-radius: 6px;
-            z-index: 10000;
-            font-size: 14px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            animation: slideIn 0.3s ease-out;
-        `;
         
-        document.body.appendChild(notification);
-        
-        // Remove after 3 seconds
-        this.notificationTimeout = setTimeout(() => {
-            notification.style.animation = 'slideOut 0.3s ease-in';
-            setTimeout(() => {
+        // Append to container
+        notificationContainer.appendChild(notification);
+
+        // Automatically remove the notification after a duration
+        setTimeout(() => {
+            notification.classList.add('hide');
+            notification.addEventListener('transitionend', () => {
                 notification.remove();
-            }, 300);
-        }, 3000);
+            });
+        }, duration);
     },
     
     // Show welcome message for first-time users

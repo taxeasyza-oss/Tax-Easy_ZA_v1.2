@@ -100,7 +100,7 @@ window.TaxCalculator = {
             // Other deductions
             donations: this.calculateDonationsDeduction(formData, grossIncome),
             homeOffice: this.calculateHomeOfficeDeduction(formData),
-            travelExpenses: window.TAX_HELPERS.cleanNumericInput(formData.travelExpenses),
+            travelExpenses: (formData.travelMethod === 'actual_cost') ? window.TAX_HELPERS.cleanNumericInput(formData.travelExpenses) : 0,
             professionalFees: window.TAX_HELPERS.cleanNumericInput(formData.professionalFees),
             
             // Renewable energy deductions
@@ -176,25 +176,34 @@ window.TaxCalculator = {
         const businessKm = window.TAX_HELPERS.cleanNumericInput(formData.businessKm);
         const travelMethod = formData.travelMethod;
 
-        if (travelMethod === 'actual_cost') {
-            // For actual cost, the allowance is fully taxable, and expenses are deducted later.
-            // For now, we just return the allowance as taxable income.
-            return allowance;
-        } else if (travelMethod === 'deemed_rate' && businessKm > 0) {
-            // For deemed rate, a portion of the allowance is non-taxable based on business km.
-            // This is a simplified example; actual SARS rules are more complex.
-            const deemedRatePerKm = 4.76; // SARS prescribed rate per km for 2025
-            // According to SARS, a portion of the travel allowance is non-taxable based on business km.
-            // The non-taxable portion is calculated as business km * deemed rate.
-            // The taxable portion is the allowance minus the non-taxable portion, but not less than 20% of the allowance.
-            // This is a simplified interpretation for the calculator. Actual SARS rules are more complex and depend on various factors.
-            const nonTaxablePortion = Math.min(allowance, businessKm * deemedRatePerKm);
-            const taxablePortion = Math.max(allowance - nonTaxablePortion, allowance * 0.20); // At least 20% of the allowance is always taxable
-            return taxablePortion;
-        } else {
-            // Default to fully taxable if no specific method or business km provided
-            return allowance;
+        // According to SARS, at least 80% of a travel allowance is initially taxable.
+        // The remaining portion can be reduced by business travel deductions.
+        const initialTaxableAllowance = allowance * 0.80;
+        let deductibleAmount = 0;
+
+        if (travelMethod === 'deemed_rate' && businessKm > 0) {
+            const deemedRatePerKm = window.TAX_CONSTANTS_2025.LIMITS.TRAVEL_RATES.deemed_rate_per_km;
+            // The deduction is based on business kilometers at the deemed rate.
+            // This deduction reduces the initially taxable portion of the allowance.
+            deductibleAmount = businessKm * deemedRatePerKm;
+        } else if (travelMethod === 'actual_cost') {
+            // For actual cost, the allowance is fully taxable initially, and actual expenses
+            // are claimed as a deduction later. For this function, we treat the entire
+            // allowance as taxable income, and the actual expenses will be handled
+            // as a separate deduction in calculateDeductions.
+            // However, for the purpose of *reducing* the allowance's taxable portion here,
+            // we assume actual costs will reduce the allowance down to the 20% minimum taxable.
+            // This is a simplification. A more robust system would require actual expense input here.
+            // For now, we will ensure at least 20% remains taxable.
+            // The actual cost deduction will be handled in calculateDeductions.
+            return allowance; // Entire allowance is taxable, actual costs are a deduction
         }
+
+        // The taxable portion of the allowance is the initial taxable portion minus the deductible amount,
+        // but not less than 20% of the total allowance.
+        const taxablePortion = Math.max(initialTaxableAllowance - deductibleAmount, allowance * 0.20);
+        
+        return taxablePortion;
     },
 
     // Calculate solar water heating deduction

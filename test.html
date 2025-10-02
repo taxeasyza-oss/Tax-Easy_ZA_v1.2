@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Script Test</title>
+</head>
+<body>
+    <h1>Testing Scripts</h1>
+    <div id="output"></div>
+    
+    <script>
+        window.addEventListener('error', function(e) {
+            document.getElementById('output').innerHTML += '<p style="color: red;">Error: ' + e.message + ' at ' + e.filename + ':' + e.lineno + '</p>';
+        });
+    </script>
+    
+    <script src="js/tax-constants.js"></script>
+    <script src="js/tax-helpers.js"></script>
+    <script src="js/tax-calculator.js"></script>
+    <script src="js/pdf-generator.js"></script>
+    <script src="js/tooltip-system.js"></script>
+    <script src="js/wizard-navigation.js"></script>
+    <script src="js/main.js"></script>
+    
+    <script>
+        setTimeout(function() {
+            var output = document.getElementById('output');
+            output.innerHTML += '<p>TaxEasyApp: ' + (typeof window.TaxEasyApp) + '</p>';
+            output.innerHTML += '<p>TooltipSystem: ' + (typeof window.TooltipSystem) + '</p>';
+            output.innerHTML += '<p>WizardNavigation: ' + (typeof window.WizardNavigation) + '</p>';
+            output.innerHTML += '<p>TaxHelpers: ' + (typeof window.TaxHelpers) + '</p>';
+        }, 1000);
+    </script>
+</body>
+</html>

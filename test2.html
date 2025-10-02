@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Script Load Test</title>
+</head>
+<body>
+    <h1>Script Loading Test</h1>
+    <div id="output"></div>
+    
+    <script>
+        function log(msg) {
+            document.getElementById('output').innerHTML += '<p>' + msg + '</p>';
+            console.log(msg);
+        }
+        
+        window.addEventListener('error', function(e) {
+            log('ERROR: ' + e.message + ' at ' + e.filename + ':' + e.lineno);
+        }, true);
+        
+        log('Starting script load test...');
+    </script>
+    
+    <script src="js/wizard-navigation.js" onload="log('✓ wizard-navigation.js loaded')" onerror="log('✗ wizard-navigation.js FAILED')"></script>
+    
+    <script>
+        setTimeout(function() {
+            log('WizardNavigation type: ' + (typeof window.WizardNavigation));
+            if (window.WizardNavigation) {
+                log('✓ WizardNavigation is available');
+                log('WizardNavigation.init type: ' + (typeof window.WizardNavigation.init));
+            } else {
+                log('✗ WizardNavigation is NOT available');
+            }
+        }, 500);
+    </script>
+</body>
+</html>

@@ -10,13 +10,25 @@ window.WizardNavigation = {
     init: function() {
         console.log('Initializing wizard navigation...');
         
-        this.showStep(this.currentStep);
-        this.updateNavigation();
-        this.updateStepIndicator();
-        this.updateProgress();
-        this.setupEventListeners();
-        
-        console.log('Wizard navigation initialized successfully');
+        try {
+            // Check if required elements exist
+            const steps = document.querySelectorAll('.wizard-step');
+            if (steps.length === 0) {
+                console.error('No wizard steps found in the DOM');
+                throw new Error('Wizard steps not found');
+            }
+            
+            this.showStep(this.currentStep);
+            this.updateNavigation();
+            this.updateStepIndicator();
+            this.updateProgress();
+            this.setupEventListeners();
+            
+            console.log('Wizard navigation initialized successfully');
+        } catch (error) {
+            console.error('Error initializing wizard navigation:', error);
+            throw error; // Re-throw to be caught by main app
+        }
     },
     
     // Show specific step
@@ -243,8 +255,8 @@ window.WizardNavigation = {
     // Validate personal information
     validatePersonalInfo: function() {
         const errors = [];
-        const fullName = document.getElementById('fullName')?.value.trim();
-        const emailAddress = document.getElementById('emailAddress')?.value.trim();
+        const fullName = (document.getElementById('fullName') || {}).value.trim();
+        const emailAddress = (document.getElementById('emailAddress') || {}).value.trim();
         
         if (!fullName) {
             errors.push('Full name is required');
@@ -262,10 +274,23 @@ window.WizardNavigation = {
     // Validate income information
     validateIncomeInfo: function() {
         const errors = [];
-        const basicSalary = parseFloat(document.getElementById('basicSalary')?.value) || 0;
-        
-        if (basicSalary <= 0) {
-            errors.push('Basic salary must be greater than zero');
+        const basicSalary = parseFloat((document.getElementById('basicSalary') || {}).value) || 0;
+        const travelAllowance = parseFloat((document.getElementById('travelAllowance') || {}).value) || 0;
+        const travelMethod = (document.getElementById('travelMethod') || {}).value;
+        const businessKm = parseFloat((document.getElementById('businessKm') || {}).value) || 0;
+
+        if (basicSalary < 0) {
+            errors.push('Basic salary cannot be negative');
+        }
+        if (travelAllowance < 0) {
+            errors.push('Travel allowance cannot be negative');
+        }
+
+        if (travelMethod === 'deemed_rate' && travelAllowance > 0 && businessKm <= 0) {
+            errors.push('Business Kilometers are required for Deemed Rate travel deduction if travel allowance is provided.');
+        }
+        if (businessKm < 0) {
+            errors.push('Business Kilometers cannot be negative.');
         }
         
         return errors;
@@ -278,7 +303,8 @@ window.WizardNavigation = {
         const deductionFields = ['pensionFund', 'providentFund', 'retirementAnnuity', 'medicalAid', 'donations'];
         
         deductionFields.forEach(fieldId => {
-            const value = parseFloat(document.getElementById(fieldId)?.value) || 0;
+            const element = document.getElementById(fieldId);
+            const value = parseFloat((element || {}).value) || 0;
             if (value < 0) {
                 errors.push(`${fieldId.replace(/([A-Z])/g, ' $1').toLowerCase()} cannot be negative`);
             }
@@ -290,14 +316,25 @@ window.WizardNavigation = {
     // Validate advanced deductions
     validateAdvancedDeductions: function() {
         const errors = [];
+        const travelMethod = (document.getElementById('travelMethod') || {}).value;
+        const travelExpenses = parseFloat((document.getElementById('travelExpenses') || {}).value) || 0;
+
+        // Validate travel expenses if actual cost method is selected
+        if (travelMethod === 'actual_cost' && travelExpenses <= 0) {
+            errors.push('Actual Travel Expenses are required for Actual Cost travel deduction.');
+        }
+        if (travelExpenses < 0) {
+            errors.push('Actual Travel Expenses cannot be negative.');
+        }
+
         // Validate solar PV limit
-        const solarPV = parseFloat(document.getElementById('solarPV')?.value) || 0;
+        const solarPV = parseFloat((document.getElementById('solarPV') || {}).value) || 0;
         if (solarPV > 1000000) {
             errors.push('Solar PV deduction cannot exceed R1,000,000');
         }
         
         // Validate home office limit
-        const homeOffice = parseFloat(document.getElementById('homeOffice')?.value) || 0;
+        const homeOffice = parseFloat((document.getElementById('homeOffice') || {}).value) || 0;
         if (homeOffice > 15000) {
             errors.push('Home office deduction cannot exceed R15,000');
         }

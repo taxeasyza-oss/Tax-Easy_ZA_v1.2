@@ -684,32 +684,24 @@ body {
 /* Tooltip System */
 .tooltip-icon {
     display: inline-block;
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
     background: var(--primary-color);
     color: var(--white);
-    border-radius: 50%;
     text-align: center;
-    line-height: 20px;
-/* Tooltip System */
-.tooltip-icon {
-    display: inline-block;
-    width: 18px;
-    height: 18px;
-/* Tooltip System */
-.tooltip-icon {
-    display: inline-block;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: var(--gray-300);
-    color: var(--gray-600);
-    text-align: center;
-    font-size: 0.75rem;
-    font-weight: 600;
+    line-height: 18px;
+    font-size: 0.7rem;
+    font-weight: 700;
     cursor: help;
     margin-left: var(--spacing-sm);
     position: relative;
+    transition: all 0.2s ease;
+}
+
+.tooltip-icon:hover {
+    background: var(--primary-dark);
+    transform: scale(1.1);
 }
 
 .tooltip-container {
@@ -717,7 +709,8 @@ body {
     z-index: 10000;
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.2s ease-in-out;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
     background: #1f2937;
     color: white;
     padding: 8px 12px;
@@ -897,6 +890,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    max-width: 350px; /* Limit width to prevent overflow */
 }
 
 .notification {
@@ -907,12 +901,13 @@ body {
     box-shadow: var(--shadow-md);
     opacity: 1;
     transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-    transform: translateY(0);
+    transform: translateX(0); /* Changed from translateY to translateX for slide effect */
+    animation: slideInRight 0.3s ease-out forwards; /* New animation for entry */
 }
 
 .notification.hide {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateX(100%); /* Slide out to the right */
 }
 
 .notification.info {
@@ -931,39 +926,31 @@ body {
     background-color: var(--danger-color);
 }
 
-
-
-
-
-
-/* Tooltip System */
-.tooltip-container {
-    position: absolute;
-    z-index: 10000;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.2s ease-in-out;
-    background: #1f2937;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 14px;
-    line-height: 1.4;
-    max-width: 300px;
-    word-wrap: break-word;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    font-family: 'Inter', sans-serif;
-    display: none; /* Initially hidden */
+/* Keyframe animations for notifications */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
-.tooltip-container.visible {
-    display: block;
-    opacity: 1;
+@keyframes slideOutRight {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
 }
 
-.tooltip-icon {
-    cursor: help;
-    margin-left: 8px;
-    color: var(--primary-color);
-    font-weight: bold;
-}
+
+
+
+
+

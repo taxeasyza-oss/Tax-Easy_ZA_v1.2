@@ -9,8 +9,8 @@ window.TAX_CONSTANTS_2025 = {
             { min: 0, max: 237100, rate: 0.18, cumulative: 0 },
             { min: 237101, max: 370500, rate: 0.26, cumulative: 42678 },
             { min: 370501, max: 512800, rate: 0.31, cumulative: 77362 },
-            { min: 512801, max: 673100, rate: 0.36, cumulative: 121424 },
-            { min: 673101, max: 857900, rate: 0.39, cumulative: 179147 },
+            { min: 512801, max: 673000, rate: 0.36, cumulative: 121475 },
+            { min: 673001, max: 857900, rate: 0.39, cumulative: 179147 },
             { min: 857901, max: 1817000, rate: 0.41, cumulative: 251258 },
             { min: 1817001, max: Infinity, rate: 0.45, cumulative: 644489 }
         ],
@@ -18,8 +18,8 @@ window.TAX_CONSTANTS_2025 = {
             { min: 0, max: 237100, rate: 0.18, cumulative: 0 },
             { min: 237101, max: 370500, rate: 0.26, cumulative: 42678 },
             { min: 370501, max: 512800, rate: 0.31, cumulative: 77362 },
-            { min: 512801, max: 673100, rate: 0.36, cumulative: 121424 },
-            { min: 673101, max: 857900, rate: 0.39, cumulative: 179147 },
+            { min: 512801, max: 673000, rate: 0.36, cumulative: 121475 },
+            { min: 673001, max: 857900, rate: 0.39, cumulative: 179147 },
             { min: 857901, max: 1817000, rate: 0.41, cumulative: 251258 },
             { min: 1817001, max: Infinity, rate: 0.45, cumulative: 644489 }
         ],
@@ -27,8 +27,8 @@ window.TAX_CONSTANTS_2025 = {
             { min: 0, max: 237100, rate: 0.18, cumulative: 0 },
             { min: 237101, max: 370500, rate: 0.26, cumulative: 42678 },
             { min: 370501, max: 512800, rate: 0.31, cumulative: 77362 },
-            { min: 512801, max: 673100, rate: 0.36, cumulative: 121424 },
-            { min: 673101, max: 857900, rate: 0.39, cumulative: 179147 },
+            { min: 512801, max: 673000, rate: 0.36, cumulative: 121475 },
+            { min: 673001, max: 857900, rate: 0.39, cumulative: 179147 },
             { min: 857901, max: 1817000, rate: 0.41, cumulative: 251258 },
             { min: 1817001, max: Infinity, rate: 0.45, cumulative: 644489 }
         ]

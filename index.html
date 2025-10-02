@@ -194,7 +194,7 @@
                             </div>
                             
                             <div class="form-group">
-                                <label for="travelAllowance">Travel Allowance <span class="tooltip-icon" data-tooltip="travel_allowance">?</span></label>
+                                <label for="travelAllowance">Travel Allowance (Annual) <span class="tooltip-icon" data-tooltip="travel_allowance">?</span></label>
                                 <input type="number" id="travelAllowance" name="travelAllowance" placeholder="0" min="0" step="0.01">
                             </div>
 
@@ -205,11 +205,13 @@
                                     <option value="deemed_rate">Deemed Rate (Business Km)</option>
                                     <option value="actual_cost">Actual Cost (Detailed Logbook)</option>
                                 </select>
+                                <p id="travelMethodGuidance" class="form-guidance" style="display: none;"></p>
                             </div>
                             
                             <div class="form-group" id="businessKmGroup" style="display: none;">
                                 <label for="businessKm">Business Kilometers <span class="tooltip-icon" data-tooltip="business_km">?</span></label>
                                 <input type="number" id="businessKm" name="businessKm" placeholder="0" min="0" step="1">
+                                <p class="form-guidance">A detailed logbook is mandatory for claiming business kilometers. Ensure your logbook is SARS compliant.</p>
                             </div>
                             
                             <div class="form-group">
@@ -302,9 +304,10 @@
                                 <input type="number" id="homeOffice" name="homeOffice" placeholder="0" min="0" step="0.01">
                             </div>
                             
-                            <div class="form-group">
-                                <label for="travelExpenses">Travel Expenses (Logbook) <span class="tooltip-icon" data-tooltip="travel_km_allowance">?</span></label>
+                            <div class="form-group" id="actualTravelExpensesGroup" style="display: none;">
+                                <label for="travelExpenses">Actual Travel Expenses (Logbook) <span class="tooltip-icon" data-tooltip="travel_km_allowance">?</span></label>
                                 <input type="number" id="travelExpenses" name="travelExpenses" placeholder="0" min="0" step="0.01">
+                                <p class="form-guidance">Enter your total actual business travel expenses. A detailed logbook and all receipts are mandatory for SARS compliance.</p>
                             </div>
                             
                             <div class="form-group">
@@ -448,14 +451,13 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="js/tax-constants.js"></script>
-    <script src="js/tax-calculator.js"></script>
-    <script src="js/wizard-navigation.js"></script>
-    <script src="js/tooltip-system.js"></script>
-    <script src="js/pdf-generator.js"></script>
-    <script src="js/payment-integration.js"></script>
-    <script src="js/main.js"></script>
-
+    <script src="js/tax-constants.js?v=travel-fixed"></script>
+    <script src="js/tax-helpers.js?v=travel-fixed"></script>
+    <script src="js/tax-calculator.js?v=travel-fixed"></script>
+    <script src="js/pdf-generator.js?v=travel-fixed"></script>
+    <script src="js/tooltip-system.js?v=travel-fixed"></script>
+    <script src="js/wizard-navigation.js?v=travel-fixed"></script>
+    <script src="js/main.js?v=travel-fixed"></script>
+    <!-- Initialization is handled by main.js -->
 </body>
 </html>
-
