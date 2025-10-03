@@ -759,54 +759,157 @@ window.TaxEasyApp.travelGuidanceMessages = {
 
 // Add clear all data functionality
 window.TaxEasyApp.clearAllData = function() {
-    if (confirm('Are you sure you want to clear all entered data? This action cannot be undone.')) {
-        // Reset the form
-        const form = document.getElementById('taxCalculatorForm');
-        if (form) {
-            form.reset();
-        }
-        
-        // Clear all summary displays
-        const summaryElements = [
-            'summaryGrossIncome', 'summaryDeductions', 'summaryTaxableIncome',
-            'summaryTaxBeforeRebates', 'summaryRebates', 'summaryTaxAfterRebates',
-            'summaryMedicalCredits', 'summaryNetTax', 'summaryTaxesPaid', 'finalResult'
-        ];
-        
+    // Enhanced confirmation dialog
+    const confirmed = confirm('🗑️ Clear All Data\n\nAre you sure you want to clear all entered data and start over?\n\nThis will:\n• Clear all personal information\n• Clear all income and deduction data\n• Reset all calculations\n• Remove any applied promotional codes\n\nThis action cannot be undone.');
+    
+    if (!confirmed) {
+        return;
+    }
+    
+    // Add loading state to clear button
+    const clearBtn = document.getElementById('clearDataBtn');
+    if (clearBtn) {
+        const originalText = clearBtn.innerHTML;
+        clearBtn.innerHTML = '<span class="btn-icon">⏳</span>Clearing...';
+        clearBtn.disabled = true;
+    }
+    
+    // Reset the form with visual feedback
+    const form = document.getElementById('taxCalculatorForm');
+    if (form) {
+        const inputs = form.querySelectorAll('input, select, textarea');
+        inputs.forEach((input, index) => {
+            setTimeout(() => {
+                if (input.type === 'checkbox' || input.type === 'radio') {
+                    input.checked = false;
+                } else {
+                    input.value = '';
+                }
+                // Add visual feedback
+                input.style.background = '#fff3cd';
+                setTimeout(() => {
+                    input.style.background = '';
+                }, 200);
+            }, index * 10); // Stagger the clearing
+        });
+    }
+    
+    // Clear all summary displays
+    const summaryElements = [
+        'summaryGrossIncome', 'summaryDeductions', 'summaryTaxableIncome',
+        'summaryTaxBeforeRebates', 'summaryRebates', 'summaryTaxAfterRebates',
+        'summaryMedicalCredits', 'summaryNetTax', 'summaryTaxesPaid', 'finalResult'
+    ];
+    
+    setTimeout(() => {
         summaryElements.forEach(id => {
             const element = document.getElementById(id);
             if (element) {
                 element.textContent = 'R0';
             }
         });
-        
-        // Reset result styling
-        const finalResult = document.getElementById('finalResult');
-        const resultLabel = document.getElementById('resultLabel');
-        if (finalResult) {
-            finalResult.className = 'result-amount';
-        }
-        if (resultLabel) {
-            resultLabel.textContent = 'Estimated Result:';
-        }
-        
-        // Hide the clear data button
-        const clearBtn = document.getElementById('clearDataBtn');
+    }, 300);
+    
+    // Reset result styling
+    const finalResult = document.getElementById('finalResult');
+    const resultLabel = document.getElementById('resultLabel');
+    if (finalResult) {
+        finalResult.className = 'result-amount';
+    }
+    if (resultLabel) {
+        resultLabel.textContent = 'Estimated Result:';
+    }
+    
+    // Clear promotional code state
+    if (window.TaxEasyPromoCodes) {
+        window.TaxEasyPromoCodes.promoCodeApplied = false;
+        window.TaxEasyPromoCodes.appliedPromoCode = null;
+    }
+    window.promoCodeApplied = false;
+    window.appliedPromoCode = null;
+    
+    // Reset promotional code UI
+    const promoInput = document.getElementById('promoCodeInput');
+    const promoApplyBtn = document.getElementById('applyPromoCode');
+    const promoMessage = document.getElementById('promoCodeMessage');
+    const promoSection = document.getElementById('promoCodeSection');
+    
+    if (promoInput) {
+        promoInput.value = '';
+        promoInput.disabled = false;
+    }
+    if (promoApplyBtn) {
+        promoApplyBtn.disabled = false;
+        promoApplyBtn.textContent = 'Apply Code';
+    }
+    if (promoMessage) {
+        promoMessage.style.display = 'none';
+        promoMessage.textContent = '';
+        promoMessage.className = 'promo-message';
+    }
+    if (promoSection) {
+        promoSection.classList.remove('promo-code-applied');
+    }
+    
+    // Reset purchase button
+    const purchaseButton = document.getElementById('purchaseProfessionalReport');
+    if (purchaseButton) {
+        purchaseButton.innerHTML = '<span class="btn-icon">🔒</span>Purchase Professional Report';
+        purchaseButton.style.backgroundColor = '';
+        purchaseButton.style.borderColor = '';
+        purchaseButton.title = '';
+    }
+    
+    // Hide the clear data button with animation
+    setTimeout(() => {
         if (clearBtn) {
-            clearBtn.style.display = 'none';
+            clearBtn.style.opacity = '0';
+            clearBtn.style.transform = 'translateY(10px)';
+            setTimeout(() => {
+                clearBtn.style.display = 'none';
+                clearBtn.style.opacity = '';
+                clearBtn.style.transform = '';
+                clearBtn.disabled = false;
+                clearBtn.innerHTML = '<span class="btn-icon">🗑️</span>Clear All Data';
+            }, 300);
         }
-        
-        // Go back to step 1
+    }, 700);
+    
+    // Go back to step 1
+    setTimeout(() => {
         if (typeof window.WizardNavigation !== 'undefined') {
             window.WizardNavigation.goToStep(1);
         }
+    }, 500);
+    
+    // Clear local storage
+    localStorage.removeItem('taxCalculatorData');
+    
+    // Show enhanced success notification
+    setTimeout(() => {
+        const successMsg = document.createElement('div');
+        successMsg.className = 'alert alert-success';
+        successMsg.style.position = 'fixed';
+        successMsg.style.top = '20px';
+        successMsg.style.right = '20px';
+        successMsg.style.zIndex = '9999';
+        successMsg.style.padding = '15px 20px';
+        successMsg.style.borderRadius = '8px';
+        successMsg.style.background = '#d4edda';
+        successMsg.style.border = '1px solid #c3e6cb';
+        successMsg.style.color = '#155724';
+        successMsg.style.fontWeight = '500';
+        successMsg.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+        successMsg.innerHTML = '✅ All data cleared successfully! You can start fresh.';
         
-        // Clear local storage
-        localStorage.removeItem('taxCalculatorData');
+        document.body.appendChild(successMsg);
         
-        // Show notification
-        this.showNotification('All data has been cleared successfully', 'success');
-        
-        console.log('All tax calculator data cleared');
-    }
+        // Remove success message after 4 seconds
+        setTimeout(() => {
+            successMsg.style.opacity = '0';
+            setTimeout(() => successMsg.remove(), 300);
+        }, 4000);
+    }, 1000);
+    
+    console.log('All tax calculator data cleared successfully');
 };
