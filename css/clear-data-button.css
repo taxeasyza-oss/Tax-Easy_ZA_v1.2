@@ -1,0 +1,122 @@
+/* Clear Data Button Styles */
+
+.clear-data-btn {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+    border: 2px solid #ff6b6b;
+    color: white;
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(255, 107, 107, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.clear-data-btn:hover {
+    background: linear-gradient(135deg, #ff5252 0%, #e53e3e 100%);
+    border-color: #ff5252;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3);
+}
+
+.clear-data-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(255, 107, 107, 0.2);
+}
+
+.clear-data-btn .btn-icon {
+    margin-right: 8px;
+    font-size: 1.1em;
+}
+
+/* Animation when button becomes visible */
+.clear-data-btn.show {
+    animation: slideInUp 0.5s ease-out;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Pulse animation to draw attention */
+.clear-data-btn.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 2px 4px rgba(255, 107, 107, 0.2);
+    }
+    50% {
+        box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+    }
+    100% {
+        box-shadow: 0 2px 4px rgba(255, 107, 107, 0.2);
+    }
+}
+
+/* Wizard navigation adjustments */
+.wizard-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+}
+
+.wizard-navigation .clear-data-btn {
+    margin-left: auto;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .wizard-navigation {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .wizard-navigation .clear-data-btn {
+        margin-left: 0;
+        width: 100%;
+        order: 3;
+    }
+    
+    .clear-data-btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .clear-data-btn {
+        border-width: 3px;
+        font-weight: 700;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .clear-data-btn,
+    .clear-data-btn.show,
+    .clear-data-btn.pulse {
+        animation: none;
+        transition: none;
+    }
+    
+    .clear-data-btn:hover {
+        transform: none;
+    }
+}
