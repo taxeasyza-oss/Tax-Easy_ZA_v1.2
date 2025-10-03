@@ -14,11 +14,26 @@
     <link rel="stylesheet" href="css/popia-consent.css">
     <link rel="stylesheet" href="css/enhanced-sections.css">
     <link rel="stylesheet" href="css/professional-report.css">
+    <link rel="stylesheet" href="css/promo-code-styles.css">
+    <link rel="stylesheet" href="css/error-handling.css">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Configuration for API Keys and other global settings -->
+    <script>
+        // IMPORTANT: For production environments, these values should be loaded securely
+        // from environment variables or a backend service, not directly in client-side HTML.
+        // This is a placeholder for demonstration purposes.
+        window.TAX_CONFIG = {
+            PAYFAST_MERCHANT_ID: 'YOUR_PAYFAST_MERCHANT_ID',
+            PAYFAST_MERCHANT_KEY: 'YOUR_PAYFAST_MERCHANT_KEY',
+            PAYFAST_PASSPHRASE: 'YOUR_PAYFAST_PASSPHRASE',
+            // Add other global configurations here if needed
+        };
+    </script>
 </head>
 <body>
     <!-- POPIA Compliance Banner -->
@@ -131,25 +146,24 @@
                             
                             <div class="form-group">
                                 <label for="ageGroup">Age Group <span class="tooltip-icon" data-tooltip="age_group">?</span></label>
-                                <select id="ageGroup" name="ageGroup" required>
+                                <select id="ageGroup" name="ageGroup">
                                     <option value="under65">Under 65</option>
-                                    <option value="65-74">65-74</option>
+                                    <option value="65-74">65 - 74</option>
                                     <option value="75plus">75+</option>
                                 </select>
                             </div>
-                            
                             <div class="form-group">
-                                <label for="occupation">Occupation <span class="tooltip-icon" data-tooltip="occupation">?</span></label>
-                                <select id="occupation" name="occupation" required>
-                                    <option value="">Select your occupation</option>
-                                    <option value="doctor">Doctor</option>
+                                <label for="occupation">Occupation</label>
+                                <select id="occupation" name="occupation">
+                                    <option value="none">Select Occupation (Optional)</option>
                                     <option value="teacher">Teacher</option>
-                                    <option value="it_professional">IT Professional</option>
+                                    <option value="doctor">Doctor</option>
                                     <option value="engineer">Engineer</option>
-                                    <option value="healthcare_worker">Healthcare Worker</option>
-                                    <option value="other">Other</option>
+                                    <!-- Add more occupations as needed -->
                                 </select>
                             </div>
+                            
+
                             
                             <div class="form-group full-width">
                                 <label for="emailAddress">Email Address <span class="tooltip-icon" data-tooltip="email_address">?</span></label>
@@ -210,20 +224,44 @@
                                 </div>
                             </div>
                             
-                            <div class="form-group" id="actualCostGroup" style="display: none;">
-                                <label for="actualTravelCosts">Total Actual Vehicle Costs <span class="tooltip-icon" data-tooltip="actual_travel_costs">?</span></label>
-                                <input type="number" id="actualTravelCosts" name="actualTravelCosts" placeholder="0" min="0" step="0.01">
-                                <div class="actual-cost-info">
-                                    <h5>Allowable Actual Costs Include:</h5>
-                                    <ul>
-                                        <li>Fuel costs (business portion only)</li>
-                                        <li>Maintenance and repairs</li>
-                                        <li>Insurance premiums</li>
-                                        <li>License and registration fees</li>
-                                        <li>Vehicle depreciation</li>
-                                        <li>Finance charges on vehicle loan</li>
-                                    </ul>
-                                    <p class="form-guidance"><strong>Requirements:</strong> Detailed logbook AND all receipts/invoices mandatory. Only the business-use portion is deductible.</p>
+                            <div class="form-group-collapsible" id="actualCostGroup" style="display: none;">
+                                <label class="collapsible-header">Detailed Actual Vehicle Costs <span class="tooltip-icon" data-tooltip="actual_travel_costs">?</span></label>
+                                <div class="collapsible-content">
+                                    <p class="form-guidance">Enter the total amounts for each category. Only the business-use portion is deductible. Detailed logbook AND all receipts/invoices are mandatory.</p>
+                                    <div class="form-grid-nested">
+                                        <div class="form-group">
+                                            <label for="travelFuelCosts">Fuel Costs</label>
+                                            <input type="number" id="travelFuelCosts" name="travelFuelCosts" placeholder="0" min="0" step="0.01">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="travelMaintenanceCosts">Maintenance & Repairs</label>
+                                            <input type="number" id="travelMaintenanceCosts" name="travelMaintenanceCosts" placeholder="0" min="0" step="0.01">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="travelInsuranceCosts">Insurance Premiums</label>
+                                            <input type="number" id="travelInsuranceCosts" name="travelInsuranceCosts" placeholder="0" min="0" step="0.01">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="travelLicenseFees">License & Registration</label>
+                                            <input type="number" id="travelLicenseFees" name="travelLicenseFees" placeholder="0" min="0" step="0.01">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="travelDepreciation">Vehicle Depreciation</label>
+                                            <input type="number" id="travelDepreciation" name="travelDepreciation" placeholder="0" min="0" step="0.01">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="travelFinanceCharges">Finance Charges</label>
+                                            <input type="number" id="travelFinanceCharges" name="travelFinanceCharges" placeholder="0" min="0" step="0.01">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="travelOtherCosts">Other Travel Costs</label>
+                                            <input type="number" id="travelOtherCosts" name="travelOtherCosts" placeholder="0" min="0" step="0.01">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="businessUsePercentage">Business Use Percentage (%)</label>
+                                            <input type="number" id="businessUsePercentage" name="businessUsePercentage" placeholder="0" min="0" max="100" step="1">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             
@@ -250,6 +288,11 @@
                             <div class="form-group">
                                 <label for="rentalIncome">Rental Income <span class="tooltip-icon" data-tooltip="rental_income">?</span></label>
                                 <input type="number" id="rentalIncome" name="rentalIncome" placeholder="0" min="0" step="0.01">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="rentalDeductions">Rental Deductions <span class="tooltip-icon" data-tooltip="rental_deductions">?</span></label>
+                                <input type="number" id="rentalDeductions" name="rentalDeductions" placeholder="0" min="0" step="0.01">
                             </div>
                             
                             <div class="form-group full-width">
@@ -489,6 +532,29 @@
                                     </ul>
                                 </div>
                                 
+                                <!-- Promotional Code Section -->
+                                <div class="promo-code-section" id="promoCodeSection">
+                                    <div class="promo-code-container">
+                                        <div class="promo-code-header">
+                                            <h4>💰 Have a Promotional Code?</h4>
+                                            <p>Enter your promotional code below to access the Professional Report for free.</p>
+                                        </div>
+                                        <div class="promo-code-input-wrapper">
+                                            <div class="promo-input-group">
+                                                <input type="text" id="promoCodeInput" placeholder="Enter promotional code" maxlength="36" class="promo-input">
+                                                <button type="button" id="applyPromoCode" class="btn btn-secondary">Apply Code</button>
+                                            </div>
+                                            <div id="promoCodeMessage" class="promo-message" style="display: none;"></div>
+                                        </div>
+                                        <div class="promo-code-toggle">
+                                            <button type="button" id="togglePromoCode" class="btn btn-link">
+                                                <span id="togglePromoText">Hide promotional code section</span>
+                                                <span id="togglePromoIcon">▲</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="report-actions">
                                     <button type="button" id="purchaseProfessionalReport" class="btn btn-primary btn-large">
                                         <span class="btn-icon">🔒</span>
@@ -509,6 +575,7 @@
                     <div class="wizard-navigation">
                         <button type="button" id="prevBtn" class="btn btn-secondary">← Previous</button>
                         <button type="button" id="nextBtn" class="btn btn-primary">Next →</button>
+                        <button type="button" id="clearDataBtn" class="btn btn-warning" onclick="window.TaxEasyApp.clearAllData()" style="display: none;">🗑️ Clear All Data</button>
                     </div>
                 </form>
             </div>
