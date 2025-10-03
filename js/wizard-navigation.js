@@ -235,6 +235,9 @@ window.WizardNavigation = {
     
     // Validate current step
     validateStep: function(stepNum) {
+        if (window.TaxEasyApp) {
+            window.TaxEasyApp.hideAllErrorMessages(); // Clear all previous errors
+        }
         const errors = [];
         
         switch (stepNum) {
@@ -252,6 +255,10 @@ window.WizardNavigation = {
                 break;
         }
         
+        // Also run general form validation from TaxCalculator
+        const generalErrors = window.TaxCalculator.validateFormData(this.formData);
+        errors.push(...generalErrors);
+
         if (errors.length > 0) {
             this.showValidationErrors(errors);
             return false;
@@ -352,8 +359,8 @@ window.WizardNavigation = {
     
     // Show validation errors
     showValidationErrors: function(errors) {
-        if (window.TaxEasyApp && window.TaxEasyApp.showNotification) {
-            window.TaxEasyApp.showNotification("Please correct the following errors: " + errors.join(", "), "error");
+        if (window.TaxEasyApp && window.TaxEasyApp.displayErrors) {
+            window.TaxEasyApp.displayErrors(errors);
         } else {
             alert("Please correct the following errors:\n\n" + errors.join("\n"));
         }

@@ -117,6 +117,7 @@ window.TaxEasyApp = {
         document.addEventListener("input", (e) => {
             if (e.target.closest("#taxCalculatorForm")) {
                 this.scheduleAutoSave();
+                this.clearErrorOnInput(e.target); // Clear error for the specific input
             }
         });
         
@@ -124,6 +125,7 @@ window.TaxEasyApp = {
         document.addEventListener("change", (e) => {
             if (e.target.closest("#taxCalculatorForm")) {
                 this.scheduleAutoSave();
+                this.clearErrorOnInput(e.target); // Clear error for the specific input
                 
                 // Handle travel method change for dynamic field visibility and guidance
                 if (e.target.id === 'travelMethod') {
@@ -753,3 +755,187 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 console.log('TaxEasy ZA main application controller loaded successfully');
+
+
+    // Clear all input data and reset the application
+    clearAllData: function() {
+        if (confirm("Are you sure you want to clear all entered data and start over?")) {
+            // Clear form inputs
+            const form = document.getElementById("taxCalculatorForm");
+            if (form) {
+                form.reset(); // Resets all form fields to their initial state
+            }
+
+            // Clear relevant localStorage items
+            localStorage.removeItem("taxEasyFormData");
+            localStorage.removeItem("taxeasy_used_promo_codes");
+            localStorage.removeItem("taxeasy_payment_details");
+            // Optionally, clear other application-specific local storage items
+
+            // Reset global flags/states
+            if (window.TaxEasyPromoCodes) {
+                window.TaxEasyPromoCodes.promoCodeApplied = false;
+                window.TaxEasyPromoCodes.appliedPromoCode = null;
+                window.TaxEasyPromoCodes.loadUsedCodes(); // Reload to reset 'used' status if not persistent
+            }
+            window.promoCodeApplied = false;
+            window.appliedPromoCode = null;
+
+            // Reset UI elements (e.g., summary, messages)
+            this.resetSummaryDisplay();
+            this.hideAllErrorMessages();
+
+            // Navigate back to the first step
+            if (window.WizardNavigation) {
+                window.WizardNavigation.goToStep(1);
+            }
+
+            // Re-initialize the app to ensure all states are clean
+            this.init();
+
+            this.showNotification("All data cleared successfully! You can now start fresh.", "success");
+        }
+    },
+
+    // Helper to reset summary display
+    resetSummaryDisplay: function() {
+        const summaryElements = [
+            "summaryGrossIncome", "summaryTaxableIncome", "summaryTaxPayable",
+            "summaryMonthlyTax", "summaryEffectiveRate", "summaryNetIncome",
+            "finalResult"
+        ];
+        summaryElements.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.textContent = "R0";
+                if (id === "summaryEffectiveRate") el.textContent = "0%";
+            }
+        });
+        const resultLabel = document.getElementById("resultLabel");
+        if (resultLabel) resultLabel.textContent = "Estimated Refund:";
+        const finalResult = document.getElementById("finalResult");
+        if (finalResult) finalResult.classList.remove("payable");
+        if (finalResult) finalResult.classList.add("refund");
+    },
+
+    // Helper to hide all error messages
+    hideAllErrorMessages: function() {
+        const errorMessages = document.querySelectorAll(".error-message");
+        errorMessages.forEach(msg => msg.style.display = "none");
+        const errorContainers = document.querySelectorAll(".form-group.error");
+        errorContainers.forEach(container => container.classList.remove("error"));
+        const notificationContainer = document.getElementById("notificationContainer");
+        if (notificationContainer) notificationContainer.innerHTML = "";
+    },
+
+    // Show notification (assuming a showNotification function exists or will be added)
+    showNotification: function(message, type) {
+        const container = document.getElementById("notificationContainer");
+        if (!container) return;
+
+        const notification = document.createElement("div");
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        container.appendChild(notification);
+
+        // Automatically remove after 5 seconds
+        setTimeout(() => {
+            notification.remove();
+        }, 5000);
+    },
+
+    // Placeholder for handleInitializationError (if not already present)
+    handleInitializationError: function(error) {
+        console.error("Application initialization error handler:", error);
+        this.showNotification("An error occurred during application startup. Please refresh the page.", "error");
+    },
+
+    // Placeholder for hasUnsavedChanges (if not already present)
+    hasUnsavedChanges: function() {
+        // Implement logic to check for unsaved changes if necessary
+        return false; 
+    },
+
+    // Placeholder for scheduleAutoSave (if not already present)
+    scheduleAutoSave: function() {
+        // Implement auto-save logic if necessary
+        console.log("Auto-save scheduled...");
+    }
+};
+
+
+    // Display validation errors
+    displayErrors: function(errors) {
+        this.hideAllErrorMessages(); // Clear previous errors
+        const form = document.getElementById("taxCalculatorForm");
+        if (!form) return;
+
+        errors.forEach(error => {
+            // Assuming error messages are structured as 'Field name is required' or 'Field name cannot be negative'
+            const fieldNameMatch = error.match(/^([a-zA-Z ]+) (is required|cannot be negative|is invalid)/);
+            let fieldId = null;
+
+            if (fieldNameMatch && fieldNameMatch[1]) {
+                // Convert human-readable field name to camelCase ID
+                fieldId = fieldNameMatch[1].replace(/ /g, "").toLowerCase();
+                // Special handling for 'Full Name' and 'Email Address'
+                if (fieldId === 'fullname') fieldId = 'fullName';
+                if (fieldId === 'emailaddress') fieldId = 'emailAddress';
+                if (fieldId === 'agegroup') fieldId = 'ageGroup';
+            }
+
+            const inputElement = fieldId ? document.getElementById(fieldId) : null;
+            if (inputElement) {
+                const formGroup = inputElement.closest(".form-group");
+                if (formGroup) {
+                    formGroup.classList.add("error");
+                    let errorMessageElement = formGroup.querySelector(".error-message");
+                    if (!errorMessageElement) {
+                        errorMessageElement = document.createElement("div");
+                        errorMessageElement.className = "error-message";
+                        formGroup.appendChild(errorMessageElement);
+                    }
+                    errorMessageElement.textContent = error;
+                    errorMessageElement.style.display = "block";
+                }
+            } else {
+                // If no specific field can be identified, show a general notification
+                this.showNotification(error, "error");
+            }
+        });
+
+        // Focus on the first error field
+        const firstErrorField = document.querySelector(".form-group.error input, .form-group.error select, .form-group.error textarea");
+        if (firstErrorField) {
+            firstErrorField.focus();
+        }
+    },
+
+    // Setup error handling (existing function, adding more context)
+    setupErrorHandling: function() {
+        // This function can be expanded to include global error listeners or custom error display logic.
+        // For now, it ensures that errors are displayed and cleared as needed.
+        console.log("Setting up application error handling...");
+    },
+
+    // Show welcome message (placeholder)
+    showWelcomeMessage: function() {
+        // Logic to show a welcome message for first-time users
+        console.log("Showing welcome message...");
+    }
+};
+
+
+    // Clear error for a specific input field
+    clearErrorOnInput: function(inputElement) {
+        const formGroup = inputElement.closest(".form-group");
+        if (formGroup) {
+            formGroup.classList.remove("error");
+            const errorMessageElement = formGroup.querySelector(".error-message");
+            if (errorMessageElement) {
+                errorMessageElement.style.display = "none";
+                errorMessageElement.textContent = "";
+            }
+        }
+    },
+

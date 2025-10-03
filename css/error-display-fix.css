@@ -1,0 +1,48 @@
+/* error-display-fix.css */
+
+/* Ensure error messages are contained within their form groups and do not overflow */
+.form-group {
+    position: relative;
+    margin-bottom: 1.5rem; /* Provide enough space for error messages */
+}
+
+.error-message {
+    position: absolute;
+    bottom: -1.2rem; /* Position below the input field */
+    left: 0;
+    width: 100%;
+    font-size: 0.75rem; /* Slightly smaller font for less intrusion */
+    color: var(--danger-color);
+    background-color: var(--white); /* Ensure background is clear */
+    padding: 0.2rem 0.5rem; /* Small padding */
+    border-radius: var(--radius-sm);
+    z-index: 10; /* Ensure it's above other elements if needed */
+    white-space: nowrap; /* Prevent wrapping if possible, or handle overflow */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Adjust spacing for sections that might be pushed down by error messages */
+.wizard-step {
+    padding-bottom: 3rem; /* Increase padding to accommodate potential error messages at the bottom of form groups */
+}
+
+/* Ensure the wizard navigation buttons are not affected by error messages */
+.wizard-navigation {
+    position: sticky;
+    bottom: 0;
+    background-color: var(--white); /* Ensure background is solid */
+    padding: var(--spacing-lg) var(--spacing-2xl);
+    border-top: 1px solid var(--gray-200);
+    z-index: 50;
+    box-shadow: var(--shadow-md);
+}
+
+/* Adjust the footer and disclaimer sections to ensure they are not overlapped */
+.disclaimer-section,
+.footer {
+    position: relative;
+    z-index: 1;
+    margin-top: 2rem; /* Ensure sufficient margin from content above */
+}
+

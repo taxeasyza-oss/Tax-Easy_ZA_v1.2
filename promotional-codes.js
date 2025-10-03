@@ -200,12 +200,8 @@ window.TaxEasyPromoCodes = {
     modifyPurchaseButton: function() {
         const purchaseButton = document.getElementById('purchaseProfessionalReport');
         if (!purchaseButton) return;
-
-        // Store original click handler
-        const originalHandler = purchaseButton.onclick;
-        
         // Replace with new handler
-        purchaseButton.onclick = (e) => {
+        purchaseButton.addEventListener("click", (e) => {
             if (this.promoCodeApplied || window.promoCodeApplied) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -214,11 +210,10 @@ window.TaxEasyPromoCodes = {
                 this.generateProfessionalPDFWithPromoCode();
             } else {
                 // Let original handler run (payment process)
-                if (originalHandler) {
-                    originalHandler.call(purchaseButton, e);
-                }
+                // The payfast-integration.js script attaches its own event listener
+                // We don't need to call originalHandler here as it's handled by payfast-integration.js
             }
-        };
+        });
     },
 
     // Generate professional PDF with promo code

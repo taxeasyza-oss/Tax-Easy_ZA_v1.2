@@ -62,6 +62,14 @@ window.TaxCalculator = {
         }
     },
     
+    // Calculate net rental income
+    calculateNetRentalIncome: function(rentalIncome, rentalDeductions) {
+        const income = window.TAX_HELPERS.cleanNumericInput(rentalIncome);
+        const deductions = window.TAX_HELPERS.cleanNumericInput(rentalDeductions);
+        // Rental income is taxable after allowable deductions, but deductions cannot create a loss
+        return Math.max(0, income - deductions);
+    },
+
     // Calculate total gross income
     calculateGrossIncome: function(formData) {
         const income = {
@@ -73,7 +81,7 @@ window.TaxCalculator = {
             otherAllowances: window.TAX_HELPERS.cleanNumericInput(formData.otherAllowances),
             interestIncome: this.calculateTaxableInterest(formData),
             dividendIncome: window.TAX_HELPERS.cleanNumericInput(formData.dividendIncome),
-            rentalIncome: window.TAX_HELPERS.cleanNumericInput(formData.rentalIncome)
+            netRentalIncome: this.calculateNetRentalIncome(formData.rentalIncome, formData.rentalDeductions)
         };
         
         return Object.values(income).reduce((total, amount) => total + amount, 0);
@@ -106,7 +114,8 @@ window.TaxCalculator = {
             // Renewable energy deductions
             solarPV: this.calculateSolarPVDeduction(formData),
             solarWaterHeating: this.calculateSolarWaterHeatingDeduction(formData),
-            otherRenewable: window.TAX_HELPERS.cleanNumericInput(formData.otherRenewable)
+            otherRenewable: window.TAX_HELPERS.cleanNumericInput(formData.otherRenewable),
+            occupationSpecific: this.calculateOccupationDeduction(formData, grossIncome) // Pass grossIncome for percentage calculation
         };
         
         // Calculate total deductions
@@ -206,6 +215,22 @@ window.TaxCalculator = {
         return taxablePortion;
     },
 
+    // Calculate occupation-specific deduction
+    calculateOccupationDeduction: function(formData, taxableIncome) {
+        const occupation = formData.occupation;
+        const occupationDeductions = window.TAX_CONSTANTS_2025.LIMITS.OCCUPATION_DEDUCTIONS[occupation];
+
+        if (!occupationDeductions || occupation === 'none') {
+            return 0;
+        }
+
+        const maxDeduction = occupationDeductions.max_deduction;
+        const percentageOfIncome = occupationDeductions.percentage_of_income;
+
+        // Deduction is the lesser of the max deduction or a percentage of taxable income
+        return Math.min(maxDeduction, taxableIncome * percentageOfIncome);
+    },
+
     // Calculate solar water heating deduction
     calculateSolarWaterHeatingDeduction: function(formData) {
         const cost = window.TAX_HELPERS.cleanNumericInput(formData.solarWaterHeating);
@@ -256,7 +281,9 @@ window.TaxCalculator = {
         numericFields.forEach(field => {
             const value = parseFloat(formData[field]);
             if (value < 0) {
-                errors.push(`${field} cannot be negative`);
+                // Format field name for consistency with displayErrors in main.js
+            const formattedFieldName = field.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+            errors.push(`${formattedFieldName} cannot be negative`);
             }
         });
         

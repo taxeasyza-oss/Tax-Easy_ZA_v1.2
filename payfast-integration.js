@@ -7,9 +7,9 @@ class TaxEasyPayFastIntegration {
         // PayFast Credentials - IMPORTANT: In a production environment, these should be loaded securely
         // from environment variables or a secure backend service, NOT hardcoded in client-side JS.
         // For demonstration purposes, placeholders are used here.
-        this.merchantId = window.TAX_CONFIG?.PAYFAST_MERCHANT_ID || 'YOUR_PAYFAST_MERCHANT_ID';
-        this.merchantKey = window.TAX_CONFIG?.PAYFAST_MERCHANT_KEY || 'YOUR_PAYFAST_MERCHANT_KEY';
-        this.passPhrase = window.TAX_CONFIG?.PAYFAST_PASSPHRASE || 'YOUR_PAYFAST_PASSPHRASE';
+        this.merchantId = process.env.PAYFAST_MERCHANT_ID || window.TAX_CONFIG?.PAYFAST_MERCHANT_ID || 'YOUR_PAYFAST_MERCHANT_ID';
+        this.merchantKey = process.env.PAYFAST_MERCHANT_KEY || window.TAX_CONFIG?.PAYFAST_MERCHANT_KEY || 'YOUR_PAYFAST_MERCHANT_KEY';
+        this.passPhrase = process.env.PAYFAST_PASSPHRASE || window.TAX_CONFIG?.PAYFAST_PASSPHRASE || 'YOUR_PAYFAST_PASSPHRASE';
         this.testMode = true; // Set to false for production
         this.baseUrl = this.testMode ? 
             'https://sandbox.payfast.co.za/eng/process' : 

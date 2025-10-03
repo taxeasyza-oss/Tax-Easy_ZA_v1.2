@@ -81,8 +81,34 @@ window.TAX_CONSTANTS_2025 = {
     TRAVEL_RATES: {
         deemed_rate_per_km: 4.76, // SARS prescribed rate per km for 2025
     },
+
+    // Occupation-specific deductions (examples)
+    OCCUPATION_DEDUCTIONS: {
+        teacher: {
+            description: "Educator-specific deductions (e.g., educational materials, professional development fees)",
+            max_deduction: 5000, // Example maximum annual deduction
+            percentage_of_income: 0.02 // Example: 2% of taxable income
+        },
+        doctor: {
+            description: "Medical professional deductions (e.g., medical journals, professional body fees, specialized equipment)",
+            max_deduction: 15000,
+            percentage_of_income: 0.03
+        },
+        engineer: {
+            description: "Engineer-specific deductions (e.g., professional body fees, specialized software, tools)",
+            max_deduction: 10000,
+            percentage_of_income: 0.025
+        },
+        // Add more occupations as needed
+        none: {
+            description: "No specific occupation deductions apply.",
+            max_deduction: 0,
+            percentage_of_income: 0
+        }
+    },
         
         // Medical expenses (above medical aid contributions)
+
         medical_expenses_threshold_percentage: 0.075, // 7.5% of taxable income
         medical_expenses_qualifying_percentage: 0.25   // 25% of qualifying expenses
     },
