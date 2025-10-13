@@ -2,11 +2,45 @@
 // Comprehensive SARS-compliant tax calculation system
 
 window.TaxCalculator = {
-    // Main calculation function
-    calculate: function(formData) {
-        console.log('Starting tax calculation with data:', formData);
-        
+    // ADD AT THE BEGINNING OF CALCULATION FUNCTIONS
+function validateInput(income, age, medicalAidMembers) {
+    const errors = [];
+    
+    // Income validation
+    if (isNaN(income) || income < 0) {
+        errors.push("Annual income must be a positive number");
+    }
+    if (income > 10000000) { // R10 million max reasonable limit
+        errors.push("Annual income exceeds maximum reasonable limit");
+    }
+    
+    // Age validation
+    if (isNaN(age) || age < 0 || age > 120) {
+        errors.push("Age must be between 0 and 120");
+    }
+    
+    // Medical aid validation
+    if (isNaN(medicalAidMembers) || medicalAidMembers < 0 || medicalAidMembers > 20) {
+        errors.push("Medical aid members must be between 0 and 20");
+    }
+    
+    if (errors.length > 0) {
+        throw new Error(errors.join(", "));
+    }
+    
+    return true;
+}
+
+// Main calculation functio    calculate: function(formData) {
         try {
+            // Validate inputs before proceeding with calculation
+            validateInput(
+                window.TAX_HELPERS.cleanNumericInput(formData.basicSalary), // Example income field
+                parseInt(formData.ageGroup.replace(/[^0-9]/g, "")), // Extract age from ageGroup
+                window.TAX_HELPERS.cleanNumericInput(formData.medicalMembers) // Example medical aid members field
+            );
+
+            console.log(\'Starting tax calculation with data:\', formData);
             // Step 1: Calculate gross income
             const grossIncome = this.calculateGrossIncome(formData);
             

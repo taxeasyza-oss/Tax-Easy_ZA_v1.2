@@ -1,4 +1,4 @@
-console.log('main.js loaded and starting execution.');
+
 window.TaxEasyApp = {
     init: function() {
         console.log("TaxEasyApp initializing...");
