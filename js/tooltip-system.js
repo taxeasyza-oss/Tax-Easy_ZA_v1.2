@@ -7,7 +7,7 @@ window.TooltipSystem = {
     
     // Initialize tooltip system
     init: function() {
-        console.log("Initializing tooltip system...");
+        console.log("Initializing tooltip system - v2...");
         console.log("TooltipSystem object:", this);
         
         this.createTooltipContainer();
