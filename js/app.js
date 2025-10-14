@@ -280,7 +280,7 @@ window.SARSComplianceData = {
             legislation: "Section 1 of the Income Tax Act 58 of 1962",
             efilingCode: "3615",
             category: "Employment Income"
-        },\n        "3701": {
+        },        "3701": {
             description: "Travel Allowance",
             legislation: "Section 8(1)(b)(ii) of the Income Tax Act",
             efilingCode: "3701",
